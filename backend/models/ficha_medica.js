@@ -1,10 +1,22 @@
 const {Schema, model} = require('mongoose')
 
-const Examenes = new Schema({})
+const Examenes = new Schema({
+    nombre: String,
+    fecha: Date,
+    descripcion: String,
+})
 
-const Vacunaciones = new Schema({})
+const Vacunaciones = new Schema({
+    nombre_vacuna: String,
+    fecha: Date,
+    descripcion: String,
+})
 
-const Operaciones = new Schema({})
+const Operaciones = new Schema({
+    nombre: String,
+    fecha: Date,
+    descripcion: String,
+})
 
 const Fmedica = new Schema({
     codigo: {
