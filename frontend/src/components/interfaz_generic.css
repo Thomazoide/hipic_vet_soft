@@ -1,0 +1,23 @@
+.barra_nav{
+    margin-top: 15vh;
+    text-align: center;
+    justify-content: center;
+}
+
+.navTitle{
+    margin-left: 5vh;
+}
+
+.bloque{
+    margin-left: 15vh;
+    margin-right: 15vh;
+}
+
+.cuerpo{
+    background-color:dodgerblue;
+}
+
+.list{
+    border-color: black;
+    border-width: 2vh;
+}

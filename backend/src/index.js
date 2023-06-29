@@ -1,8 +1,8 @@
 require('dotenv').config()
-const {conectarDB} = require('./database')
+const {conectarBD} = require('./database')
 const app = require('./app')
 
-conectarDB()
+conectarBD()
 
 async function main(){
     await app.listen(app.get('port'))
