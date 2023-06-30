@@ -22,7 +22,7 @@ function Interfaz_vet(){
     }, [] )
 
     return(
-        <Container className="cuerpo">
+        <body className="cuerpo">
             <Container className="barra_nav">
                 <Navbar variant="success" bg="success">
                     <Navbar.Brand className='navTitle' as='h1'>Hipic Vet-Soft</Navbar.Brand>
@@ -41,9 +41,10 @@ function Interfaz_vet(){
                         <Container>
                             {
                                 caballos.map( caballo => 
+                                <Container>
                                 <Container className="list">
                                     <span>
-                                        <li >
+                                        <li key={caballo.cod_corral}>
                                             <p> Nombre: {caballo.nombre} </p>
                                             <p> Carreras_corridas: {caballo.carreras_corridas} </p>
                                             <p> Probabilidad de victoria: {caballo.ratio_victorias} </p>
@@ -53,14 +54,15 @@ function Interfaz_vet(){
                                     <span>
                                         <button>Ver ficha veterinaria</button>
                                     </span>
-                                    <hr/>
+                                </Container>
+                                <hr/>
                                 </Container>)
                             }
                         </Container>
                     </form>
                 </Container>
             </span>
-        </Container>
+        </body>
     )
 }
 
