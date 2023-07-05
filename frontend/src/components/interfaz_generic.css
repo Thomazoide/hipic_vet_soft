@@ -23,3 +23,16 @@
     border-color: black;
     border-width: 2vh;
 }
+
+.lista-caballos{
+    max-height: 90vh;
+    border-color: beige;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+    overflow-y: auto;
+}
+
+.boton-ficha{
+    float: right;
+}

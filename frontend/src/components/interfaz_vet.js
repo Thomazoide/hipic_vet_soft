@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from "react"
-import {Container, Navbar, Nav, Form, InputGroup} from 'react-bootstrap'
+import {Container, Navbar, Nav, Form, InputGroup, Modal} from 'react-bootstrap'
 import './interfaz_generic.css'
 import axios from 'axios'
 
 function Interfaz_vet(){
     const [fichaMedica, setFichaMedica] = useState({})
     const [caballos, setCaballos] = useState([])
+    const [fichas, setFichas] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [pesoInput, setPesoInput] = useState('')
     const getData = async (e) => {
         /*const resp = await axios.post('http://localhost:4444/api/fichas', fichaMedica)*/
         const horses = await axios.get('http://localhost:4444/api/caballos')
@@ -17,8 +20,40 @@ function Interfaz_vet(){
         setCaballos(arr)
     }
 
+    const getFichas = async (e) => {
+        const fchs = await axios.get('http://localhost:4444/api/fichas')
+        let arr = []
+        for(let f of fchs.data){
+            arr.push(f)
+        }
+        console.log(arr)
+        setFichas(arr)
+    }
+
+    const toggleModalState = () => {
+        setShowModal(true)
+    }
+
+    const closeModal = () => {
+        setShowModal(false)
+    }
+
+    const handleInput = (e) => {
+        setPesoInput(e.target.value)
+        console.log(e.target.value)
+    }
+
+    const guardarFicha = async (e) => {
+        e.preventDefault()
+
+        
+    }
+
+    
+
     useEffect( () => {
         getData()
+        getFichas()
     }, [] )
 
     return(
@@ -38,7 +73,7 @@ function Interfaz_vet(){
             <span>
                 <Container className="bloque">
                     <form>
-                        <Container>
+                        <Container className="lista-caballos">
                             {
                                 caballos.map( caballo => 
                                 <Container>
@@ -46,13 +81,14 @@ function Interfaz_vet(){
                                     <span>
                                         <li key={caballo.cod_corral}>
                                             <p> Nombre: {caballo.nombre} </p>
-                                            <p> Carreras_corridas: {caballo.carreras_corridas} </p>
-                                            <p> Probabilidad de victoria: {caballo.ratio_victorias} </p>
-                                            <p> Codigo de equipo: {caballo.cod_corral} </p>
+                                            <p> Propietario: {caballo.propietario} </p>
+                                            <p> Codigo de caballo: {caballo.codigo_caballo} </p>
+                                            <p> Codigo de equipo: {caballo.codigo_equipo} </p>
                                         </li>
                                     </span> 
+                                    
                                     <span>
-                                        <button>Ver ficha veterinaria</button>
+                                        <button className="boton-ficha" >Ver ficha veterinaria</button>
                                     </span>
                                 </Container>
                                 <hr/>

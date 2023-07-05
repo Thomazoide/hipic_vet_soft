@@ -19,10 +19,11 @@ const Operaciones = new Schema({
 })
 
 const Fmedica = new Schema({
-    codigo: {
+    codigo: { /* Debe ser igual a "codigo_caballo" del modelo "caballos.js" */
         type: String,
         required: true,
     },
+    peso: Schema.Types.Decimal128,
     examenes: [Examenes],
     vacunaciones: [Vacunaciones],
     operaciones: [Operaciones],
