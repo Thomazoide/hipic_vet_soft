@@ -7,7 +7,7 @@ cliente = MongoClient("mongodb+srv://Thomazoide:Thom1232!@mastercluster.hasjpif.
 db = cliente["Club_Hipico"]
 
 db_caballos = db["caballos"]
-db_corrales = db["corrales"]
+db_fichas = db["fichas_medicas"]
 db_usuarios = db["usuarios"]
 
 def getPplData():

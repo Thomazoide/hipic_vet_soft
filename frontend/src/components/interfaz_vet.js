@@ -16,6 +16,7 @@ function Interfaz_vet(){
         for(let h of horses.data){
             arr.push(h)
         }
+        console.log(horses)
         console.log(arr)
         setCaballos(arr)
     }
