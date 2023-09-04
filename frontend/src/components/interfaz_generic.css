@@ -1,7 +1,28 @@
+body{
+    background-color: steelblue;
+}
+
 .barra_nav{
     
     text-align: center;
     justify-content: center;
+}
+
+.opciones{
+    display: flex;
+}
+
+.ficha-info{
+    display: flex;
+    flex-direction: row;
+}
+
+.minititle{
+    font-weight: bold;
+}
+
+.displayer{
+    text-align: center;
 }
 
 .navTitle{
@@ -9,8 +30,12 @@
 }
 
 .bloque{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
     margin-left: 15vh;
     margin-right: 15vh;
+    
 }
 
 .cuerpo{
@@ -19,9 +44,10 @@
 
 .list{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     border-color: black;
     border-width: 2vh;
+    
 }
 
 .lista-caballos{
@@ -33,6 +59,17 @@
     overflow-y: auto;
 }
 
+.caballo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.botones{
+    margin: 5vh;
+}
+
 .boton-ficha{
-    float: right;
+    margin-right: 15vh;
+    margin-left: 15vh;
 }
