@@ -1,17 +1,20 @@
 import './interfaz_generic.css'
 import {useEffect, useState} from 'react'
-import {Container, Button, ButtonGroup} from 'react-bootstrap'
+import {Container, Button, ButtonGroup, Modal, Form} from 'react-bootstrap'
 import axios from 'axios'
 
 
-export default function Vet_Home(){
+export default function VetHome(){
     const [horses, setHorses] = useState([])
     const [fichas, setFichas] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [compFicha, setCompFicha] = useState(false)
+    const [modalFicha, setModalFicha] = useState(false)
     const [selection, setSelection] = useState('')
     const [selected_horse, setSelected_horse] = useState({})
     const [selected_ficha, setSelected_ficha] = useState({})
+    const mostrarVentana = () => setModalFicha(true)
+    const cerrarVentana = () => setModalFicha(false)
     console.log(selection)
     useEffect( () => {
         axios.get('http://localhost:4444/api/caballos').then( response => {
@@ -35,37 +38,37 @@ export default function Vet_Home(){
     }, [] )
     console.log(horses)
     console.log(fichas)
+    const regExChange = () => {
+        for(let f of fichas){
+            let valor = selected_horse.codigo_caballo
+            if(valor === f.codigo){
+                setSelected_ficha(f)
+                setCompFicha(true)
+            }
+        }
+    }
+    useEffect( () => {
+        regExChange()
+    }, [selected_horse] )
     const regChange = (event) => {
-        let valor = event.currentTarget.value
-        let aux = {}
+        let valor = event.target.value
         setSelection(valor)
         for(let hs of horses){
             if(valor === hs.codigo_caballo){
                 setSelected_horse(hs)
-                aux = hs
+                console.log(hs)
+                setCompFicha(false)
             }
-        }
-        if(fichas.length>0){
-            for(let f of fichas){
-                if(aux.codigo_caballo === f.codigo){
-                    setSelected_ficha(f)
-                    setCompFicha(true)
-                }else(
-                    setCompFicha(false)
-                )
-            }
-        }else{
-            setCompFicha(false)
         }
     }
     console.log(selected_ficha.peso)
     console.log(selected_ficha.examenes)
-    
-    const SeccionFicha = () => {
+    const [pesoInput, setPesoInput] = useState()
+    const SeccionFicha = (props) => {
         if(compFicha===true){
             return(
                 <Container className='Seccion-ficha'>
-                    <p> Peso: {selected_ficha.peso['$numberDecimal']} </p>
+                    <p> Peso: {selected_ficha.peso['$numberDecimal']} Kg</p>
                     <Container className='ficha-info'>
                         <Container className='displayer'>
                             <p className='minititle'>Examenes</p>
@@ -103,9 +106,57 @@ export default function Vet_Home(){
                 </Container>
             )
         }else{
+            
+            const handleChange = (e) => {
+                setPesoInput(e.target.value)
+            }
+            const handleSubmit = () => {
+                let aux = pesoInput
+                let plantilla = {
+                    codigo: selected_horse.codigo_caballo,
+                    peso: aux,
+                    examenes: [],
+                    vacunaciones: [],
+                    operaciones: []
+                }
+                console.log(plantilla)
+                axios.post('http://localhost:4444/api/fichas', {codigo: plantilla.codigo, peso: plantilla.peso, examenes: plantilla.examenes, vacunaciones: plantilla.vacunaciones, operaciones: plantilla.operaciones })
+            }
+            console.log(pesoInput)
             return(
                 <Container>
-                    <p className='minititle'> Este caballo no tiene ficha medica creada... </p>
+                    
+                        <Modal
+                        {...props}
+                        show={modalFicha}
+                        onHide={cerrarVentana}
+                        backdrop='static'
+                        keyboard={false}
+                        centered>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Crear ficha</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form>
+                                    <Form.Group className='mb-3' controlId='formularioFicha'>
+                                        <Form.Label>Peso del caballo (Kg)</Form.Label>
+                                        <Form.Control
+                                        type='text'
+                                        placeholder='999.999'
+                                        value={pesoInput}
+                                        onChange={handleChange}
+                                        autoFocus
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className='mb-3' controlId='horseCode'>
+                                        <Form.Label>Codigo de caballo: {selected_horse.codigo_caballo}</Form.Label>
+                                    </Form.Group>
+                                    <Button variant='success' type='submit' onClick={handleSubmit}>Crear ficha</Button>
+                                </Form>
+                            </Modal.Body>
+                        </Modal>
+                    <p className='minititle'> Este caballo no tiene ficha creada... </p>
+                    <Button variant='success' onClick={mostrarVentana}>Crear ficha veterinaria</Button>
                 </Container>
             )
         }
@@ -119,7 +170,7 @@ export default function Vet_Home(){
                     <ButtonGroup>
                         {
                             horses.map( horse => (
-                                <Button variant='success' value={horse.codigo_caballo} onClick= {regChange}>{horse.nombre}</Button>
+                                <Button variant='success' value={horse.codigo_caballo} onClick= {regChange} onChange={regChange} >{horse.nombre}</Button>
                             ) )
                         }
                     </ButtonGroup>
@@ -131,13 +182,10 @@ export default function Vet_Home(){
                             <p> Propietario: {selected_horse.propietario} </p>
                             <p> Codigo: {selected_horse.codigo_caballo} </p>
                         </Container>
-                        <hr/>
-                        <Container>
-                            <SeccionFicha/>
-                        </Container>
-                        <Container className='botones'>
-
-                        </Container>
+                    </Container>
+                    <hr/>
+                    <Container>
+                        <SeccionFicha/>
                     </Container>
                 </Container>
             </Container>

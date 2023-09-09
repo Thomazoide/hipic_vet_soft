@@ -1,5 +1,5 @@
 body{
-    background-color: steelblue;
+    background-color: #282c34;
 }
 
 .barra_nav{
@@ -39,12 +39,14 @@ body{
 }
 
 .cuerpo{
-    background-color:dodgerblue;
+    background-color:#222c41;
+    min-height: 100vh;
+    color: white;
 }
 
 .list{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border-color: black;
     border-width: 2vh;
     
@@ -53,7 +55,7 @@ body{
 .lista-caballos{
     max-height: 90vh;
     border-color: beige;
-    border-style: solid;
+    border-style: outset;
     border-width: 3px;
     border-radius: 5px;
     overflow-y: auto;
@@ -72,4 +74,8 @@ body{
 .boton-ficha{
     margin-right: 15vh;
     margin-left: 15vh;
+}
+
+.logoHorse{
+    max-height: 10vh;
 }
