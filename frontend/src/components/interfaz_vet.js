@@ -4,6 +4,7 @@ import {Container, Navbar, Nav} from 'react-bootstrap'
 import './interfaz_generic.css'
 
 import VetHome from "./vet_home"
+import VetFichas from "./vet_fichas"
 
 function InterfazVet(){
     const navegar = useNavigate()
@@ -50,7 +51,9 @@ function InterfazVet(){
                     </Navbar>
                 </Container>
                 <hr/>
-                
+                <Container fluid>
+                    <VetFichas/>
+                </Container>
             </Container>
         )
     }
