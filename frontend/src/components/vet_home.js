@@ -75,7 +75,7 @@ export default function VetHome(){
                             
                                 {
                                     selected_ficha.examenes.map(examen => (
-                                        <Container>
+                                        <Container key={examen.fecha}>
                                             <p> Tipo: {examen.tipo} | Fecha: {examen.fecha} </p>
                                         </Container>
                                     ))
@@ -87,7 +87,7 @@ export default function VetHome(){
                             <ul>
                                 {
                                     selected_ficha.vacunaciones.map(examen => (
-                                        <li> {examen} </li>
+                                        <li > {examen} </li>
                                     ))
                                 }
                             </ul>
@@ -170,7 +170,7 @@ export default function VetHome(){
                     <ButtonGroup>
                         {
                             horses.map( horse => (
-                                <Button variant='success' value={horse.codigo_caballo} onClick= {regChange} onChange={regChange} >{horse.nombre}</Button>
+                                <Button key={horse.nombre} variant='success' value={horse.codigo_caballo} onClick= {regChange} onChange={regChange} >{horse.nombre}</Button>
                             ) )
                         }
                     </ButtonGroup>
