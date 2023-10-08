@@ -20,4 +20,15 @@ FmedicaCtrl.crearFicha = async (req, res) => {
     res.json(nueva_ficha)
 }
 
+FmedicaCtrl.updateFicha = async (req, res) => {
+    const auxF = req.body
+    try{
+        console.log("Result: ", auxF)
+        await Fmedica.updateOne({_id: auxF._id}, auxF)
+        return res.status(200).json({message: "Updated!"})
+    }catch(err){
+        console.log(err)
+    }
+}
+
 module.exports = FmedicaCtrl

@@ -76,7 +76,17 @@ export default function VetFichas(){
 
     const onSelection = (event) => {
         let aux1 = event
+        let aux2 = {}
         aux1 = aux1.split('|')
+        aux1[0] = aux1[0].trim()
+        aux1[1] = aux1[1].trim()
+        for(let f of fichas){
+            if(f.codigo === aux1[1]){
+                aux2 = f
+            }
+        }
+        setSelected_ficha(aux2)
+        setSelection(event)
         console.log(aux1)
     }
 
@@ -107,7 +117,49 @@ export default function VetFichas(){
                         </Dropdown>
                     </Container>
                     <Container className='lista-caballos'>
-
+                        <Container className='seccion-ficha'>
+                            <h3>Peso: {selected_ficha.peso["$numberDecimal"]} Kg </h3>
+                            <hr/>
+                            <Container className='ficha-info' >
+                                <Container className='displayer'>
+                                    <p className='minititle'>Exámenes</p>
+                                    
+                                    {
+                                        selected_ficha.examenes.map( (examen) => (
+                                            <Container>
+                                                <p> tipo: {examen.tipo} </p>
+                                                <p> fecha: {examen.fecha} </p>
+                                                <hr/>
+                                            </Container>
+                                        ) )
+                                    }
+                                </Container>
+                                <Container className='displayer'>
+                                    <p className='minititle'>Vacunaciones</p>
+                                    {
+                                        selected_ficha.vacunaciones.map( (examen) => (
+                                            <Container>
+                                                <p> tipo: {examen.tipo} </p>
+                                                <p> fecha: {examen.fecha} </p>
+                                                <hr/>
+                                            </Container>
+                                        ) )
+                                    }
+                                </Container>
+                                <Container className='displayer'>
+                                    <p className='minititle'>Cirujías</p>
+                                    {
+                                        selected_ficha.operaciones.map( (examen) => (
+                                            <Container>
+                                                <p> tipo: {examen.tipo} </p>
+                                                <p> fecha: {examen.fecha} </p>
+                                                <hr/>
+                                            </Container>
+                                        ) )
+                                    }
+                                </Container>
+                            </Container>
+                        </Container>
                     </Container>
                 </Container>
             )
