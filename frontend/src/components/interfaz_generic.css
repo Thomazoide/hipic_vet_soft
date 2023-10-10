@@ -2,6 +2,16 @@ body{
     background-color: #282c34;
 }
 
+.btn-crear{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: outset;
+    border-width: 2px;
+    border-radius: 15px;
+    padding: 5px;
+}
+
 .barra_nav{
     
     text-align: center;
@@ -78,4 +88,8 @@ body{
 
 .logoHorse{
     max-height: 10vh;
+}
+
+.boton-seleccion{
+    margin: 1vh;
 }

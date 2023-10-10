@@ -1,6 +1,6 @@
 import './interfaz_generic.css'
-import { useState, useEffect } from "react"
-import { CloseButton, Container, Dropdown, DropdownButton, Spinner } from 'react-bootstrap'
+import { useState, useEffect, useRef } from "react"
+import { Button, CloseButton, Container, Dropdown, DropdownButton, Form, Modal, Spinner } from 'react-bootstrap'
 import axios from 'axios'
 
 
@@ -12,9 +12,18 @@ export default function VetFichas(){
     const [selected_ficha, setSelected_ficha] = useState({})
     const [isSelected, setIsSelected] = useState(false)
     const [lista, setLista] = useState([])
+    const [showModal, setShowModal] = useState(false)
+    const [tipoSel, setTipoSel] = useState('')
+    const [evc, setEcv] = useState('')
+    const tipoInput = useRef(null)
 
 
     useEffect( () => {
+        let date = new Date()
+        date = date.toISOString().split('T')[0]
+
+        localStorage.setItem('fecha', date)
+        localStorage.setItem('tipo', 'null')
         axios.get('http://localhost:4444/api/fichas').then( res => {
             let arr = []
             console.log(res.data)
@@ -90,6 +99,72 @@ export default function VetFichas(){
         console.log(aux1)
     }
 
+    const mostrarModal = (event) => {
+        setEcv(event.target.value)
+        setShowModal(true)
+    }
+
+    const cerrarModal = () => setShowModal(false)
+
+    const ModalCrear = (props) => {
+        if(evc === ''){
+            return(
+                <Container>
+                    <Modal show={showModal} onHide={cerrarModal}>
+                        <Modal.Header closeButton></Modal.Header>
+                        <Modal.Body className='btn-crear'>
+                            <Spinner variant='success'/>
+                        </Modal.Body>
+                    </Modal>
+                </Container>
+            )
+        }else{
+            if(evc === 'examen'){
+                return(
+                    <Container>
+                        <Modal 
+                        {...props}
+                        show={showModal} 
+                        onHide={cerrarModal}
+                        backdrop='static'
+                        keyboard={false}
+                        centered
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title>Agregar examen</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Container>
+                                    <Form>
+                                        <Form.Group className='mb-3'controlId='horseCode'>
+                                            <Form.Label>Tipo de examen:</Form.Label>
+                                            <Form.Control
+                                            type='text'
+                                            placeholder='...'
+                                            ref={tipoInput}
+                                            onChange={ () => console.log(tipoInput.current.value) }
+                                            autoFocus/>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>
+                                                Fecha: {localStorage.getItem('fecha')}
+                                            </Form.Label>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Button variant='success' type='submit' onClick={ (event) => event.preventDefault.then(console.log(localStorage.getItem('fecha')))}>Agregar</Button>
+                                        </Form.Group>
+                                    </Form>
+                                </Container>
+                            </Modal.Body>
+                        </Modal>
+                    </Container>
+                )
+            }
+            if(evc === 'vacuna'){}
+            if(evc === 'cirujia'){}
+        }
+    }
+
     if(fichas.length < 1){
         return(
             <Container className='cuerpo'>
@@ -103,8 +178,8 @@ export default function VetFichas(){
             return(
                 <Container className='cuerpo'>
                     <Container className='boton-seleccion'>
-                        <Dropdown onSelect={onSelection} >
-                            <Dropdown.Toggle variant = 'success'>
+                        <Dropdown onSelect={onSelection}>
+                            <Dropdown.Toggle variant = 'success' size='lg'>
                                 {selection}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
@@ -117,16 +192,20 @@ export default function VetFichas(){
                         </Dropdown>
                     </Container>
                     <Container className='lista-caballos'>
+                        <ModalCrear/>
                         <Container className='seccion-ficha'>
                             <h3>Peso: {selected_ficha.peso["$numberDecimal"]} Kg </h3>
                             <hr/>
                             <Container className='ficha-info' >
-                                <Container className='displayer'>
-                                    <p className='minititle'>Exámenes</p>
-                                    
+                                <Container className='big-displayer'>
+                                    <Container className='btn-crear'>
+                                        <p className='minititle'>Exámenes</p>
+                                        <Button variant='outline-success' size='sm' value={'examen'} onClick={mostrarModal}>Agregar examen</Button>
+                                    </Container>
+                                    <hr/>
                                     {
                                         selected_ficha.examenes.map( (examen) => (
-                                            <Container>
+                                            <Container className='displayer'>
                                                 <p> tipo: {examen.tipo} </p>
                                                 <p> fecha: {examen.fecha} </p>
                                                 <hr/>
@@ -134,8 +213,12 @@ export default function VetFichas(){
                                         ) )
                                     }
                                 </Container>
-                                <Container className='displayer'>
-                                    <p className='minititle'>Vacunaciones</p>
+                                <Container className='big-displayer'>
+                                    <Container className='btn-crear'>
+                                        <p className='minititle'>Vacunaciones</p>
+                                        <Button variant='outline-success' size='sm' value={'vacuna'} onClick={mostrarModal}>Agregar vacunacion</Button>
+                                    </Container>
+                                    <hr/>
                                     {
                                         selected_ficha.vacunaciones.map( (examen) => (
                                             <Container>
@@ -146,8 +229,12 @@ export default function VetFichas(){
                                         ) )
                                     }
                                 </Container>
-                                <Container className='displayer'>
-                                    <p className='minititle'>Cirujías</p>
+                                <Container className='big-displayer'>
+                                    <Container className='btn-crear'>
+                                        <p className='minititle'>Cirujías</p>
+                                        <Button variant='outline-success' size='sm' value={'cirujia'} onClick={mostrarModal}>Agregar cirujia</Button>
+                                    </Container>
+                                    <hr/>
                                     {
                                         selected_ficha.operaciones.map( (examen) => (
                                             <Container>
