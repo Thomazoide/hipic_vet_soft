@@ -25,7 +25,18 @@ FmedicaCtrl.updateFicha = async (req, res) => {
     try{
         console.log("Result: ", auxF)
         await Fmedica.updateOne({_id: auxF._id}, auxF)
-        return res.status(200).json({message: "Updated!"})
+        return res.status(200).json({message: "Agregado!"})
+    }catch(err){
+        console.log(err)
+    }
+}
+
+FmedicaCtrl.deleteFicha = async (req ,res) => {
+    const auxF = req.body
+    try{
+        console.log('Result: ', auxF)
+        await Fmedica.findByIdAndDelete(auxF._id)
+        return res.status(200).json({message: "Eliminado!"})
     }catch(err){
         console.log(err)
     }

@@ -1,6 +1,6 @@
 import './interfaz_generic.css'
 import { useState, useEffect, useRef } from "react"
-import { Button, CloseButton, Container, Dropdown, DropdownButton, Form, Modal, Spinner } from 'react-bootstrap'
+import { Button, Container, Dropdown, Form, Modal, Spinner, Alert } from 'react-bootstrap'
 import axios from 'axios'
 
 
@@ -13,9 +13,11 @@ export default function VetFichas(){
     const [isSelected, setIsSelected] = useState(false)
     const [lista, setLista] = useState([])
     const [showModal, setShowModal] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
     const [tipoSel, setTipoSel] = useState('')
     const [evc, setEcv] = useState('')
     const tipoInput = useRef(null)
+    const descInyec = useRef(null)
 
 
     useEffect( () => {
@@ -106,6 +108,52 @@ export default function VetFichas(){
 
     const cerrarModal = () => setShowModal(false)
 
+    const fichaPut = async () => {
+        //event.preventDefault()
+        console.log(tipoInput)
+        let auxFicha = selected_ficha
+        let auxFecha = localStorage.getItem('fecha')
+        let aux = {
+            tipo: tipoInput.current.value,
+            fecha: auxFecha
+        }
+        if(tipoInput){
+            if(evc === 'examen'){
+                auxFicha.examenes.push(aux)
+                await axios.put('http://localhost:4444/api/fichas', auxFicha)
+                setShowAlert(true)
+                setShowModal(false)
+            }
+            if(evc === 'vacuna'){
+                aux.descripcion = descInyec.current.value
+                auxFicha.vacunaciones.push(aux)
+                await axios.put('http://localhost:4444/api/fichas', auxFicha)
+                setShowAlert(true)
+                setShowModal(false)
+            }
+            if(evc === 'cirujia'){
+                aux.descripcion = descInyec.current.value
+                auxFicha.operaciones.push(aux)
+                await axios.put('http://localhost:4444/api/fichas', auxFicha)
+                setShowAlert(true)
+                setShowModal(false)
+            }
+        }else{
+            setShowAlert(true)
+        }
+    }
+
+    const AlertaSuccess = () => {
+        return(
+            <Container>
+                <Alert variant='success' onClose={ () => setShowAlert(false) } dismissible>
+                    <Alert.Heading> <Spinner variant='dark' size='sm'/> </Alert.Heading>
+                    <p className='minititle'> Agregado correctamente </p>
+                </Alert>
+            </Container>
+        )
+    }
+
     const ModalCrear = (props) => {
         if(evc === ''){
             return(
@@ -151,7 +199,7 @@ export default function VetFichas(){
                                             </Form.Label>
                                         </Form.Group>
                                         <Form.Group>
-                                            <Button variant='success' type='submit' onClick={ (event) => event.preventDefault.then(console.log(localStorage.getItem('fecha')))}>Agregar</Button>
+                                            <Button variant='success' onClick={ fichaPut }>Agregar</Button>
                                         </Form.Group>
                                     </Form>
                                 </Container>
@@ -160,8 +208,108 @@ export default function VetFichas(){
                     </Container>
                 )
             }
-            if(evc === 'vacuna'){}
-            if(evc === 'cirujia'){}
+            if(evc === 'vacuna'){
+                return(
+                    <Container>
+                        <Modal 
+                        {...props}
+                        show={showModal} 
+                        onHide={cerrarModal}
+                        backdrop='static'
+                        keyboard={false}
+                        centered
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title>Agregar vacunacion</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Container>
+                                    <Form>
+                                        <Form.Group>
+                                            <Form.Label>Titulo</Form.Label>
+                                            <Form.Control
+                                            type='text'
+                                            placeholder='...'
+                                            ref={tipoInput}
+                                            onChange={ () => console.log(tipoInput.current.value) }
+                                            autoFocus/>
+                                        </Form.Group>
+                                        <Form.Group className='mb-3'controlId='horseCode'>
+                                            <Form.Label>Descripcion:</Form.Label>
+                                            <Form.Control
+                                            type='text'
+                                            placeholder='...'
+                                            as='textarea'
+                                            rows={3}
+                                            ref={descInyec}
+                                            onChange={ () => console.log(descInyec.current.value) }
+                                            />
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>
+                                                Fecha: {localStorage.getItem('fecha')}
+                                            </Form.Label>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Button variant='success' onClick={ fichaPut }>Agregar</Button>
+                                        </Form.Group>
+                                    </Form>
+                                </Container>
+                            </Modal.Body>
+                        </Modal>
+                    </Container>
+                )
+            }
+            if(evc === 'cirujia'){
+                return(
+                    <Container>
+                        <Modal 
+                        {...props}
+                        show={showModal} 
+                        onHide={cerrarModal}
+                        backdrop='static'
+                        keyboard={false}
+                        centered
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title>Agregar cirujia</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Container>
+                                    <Form>
+                                        <Form.Group className='mb-3'controlId='horseCode'>
+                                            <Form.Label>Tipo de cirujia:</Form.Label>
+                                            <Form.Control
+                                            type='text'
+                                            placeholder='...'
+                                            ref={tipoInput}
+                                            onChange={ () => console.log(tipoInput.current.value) }
+                                            autoFocus/>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>Descripcion</Form.Label>
+                                            <Form.Control
+                                            type='text'
+                                            as='textarea'
+                                            rows={3}
+                                            ref={descInyec}
+                                            onChange={ () => console.log(descInyec.current.value) }/>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Form.Label>
+                                                Fecha: {localStorage.getItem('fecha')}
+                                            </Form.Label>
+                                        </Form.Group>
+                                        <Form.Group>
+                                            <Button variant='success' onClick={ fichaPut }>Agregar</Button>
+                                        </Form.Group>
+                                    </Form>
+                                </Container>
+                            </Modal.Body>
+                        </Modal>
+                    </Container>
+                )
+            }
         }
     }
 
@@ -178,6 +326,10 @@ export default function VetFichas(){
             return(
                 <Container className='cuerpo'>
                     <Container className='boton-seleccion'>
+                        {
+                            showAlert ??
+                            <AlertaSuccess/> 
+                        }
                         <Dropdown onSelect={onSelection}>
                             <Dropdown.Toggle variant = 'success' size='lg'>
                                 {selection}
@@ -204,8 +356,8 @@ export default function VetFichas(){
                                     </Container>
                                     <hr/>
                                     {
-                                        selected_ficha.examenes.map( (examen) => (
-                                            <Container className='displayer'>
+                                        selected_ficha.examenes.map( (examen, index) => (
+                                            <Container className='displayer' key={index}>
                                                 <p> tipo: {examen.tipo} </p>
                                                 <p> fecha: {examen.fecha} </p>
                                                 <hr/>
@@ -220,8 +372,8 @@ export default function VetFichas(){
                                     </Container>
                                     <hr/>
                                     {
-                                        selected_ficha.vacunaciones.map( (examen) => (
-                                            <Container>
+                                        selected_ficha.vacunaciones.map( (examen, index) => (
+                                            <Container className='displayer' key={index}>
                                                 <p> tipo: {examen.tipo} </p>
                                                 <p> fecha: {examen.fecha} </p>
                                                 <hr/>
@@ -236,8 +388,8 @@ export default function VetFichas(){
                                     </Container>
                                     <hr/>
                                     {
-                                        selected_ficha.operaciones.map( (examen) => (
-                                            <Container>
+                                        selected_ficha.operaciones.map( (examen, index) => (
+                                            <Container className='displayer' key={index}>
                                                 <p> tipo: {examen.tipo} </p>
                                                 <p> fecha: {examen.fecha} </p>
                                                 <hr/>

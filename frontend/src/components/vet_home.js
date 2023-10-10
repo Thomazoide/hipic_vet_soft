@@ -1,5 +1,5 @@
 import './interfaz_generic.css'
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useRef} from 'react'
 import {Container, Button, ButtonGroup, Modal, Form} from 'react-bootstrap'
 import axios from 'axios'
 
@@ -63,6 +63,7 @@ export default function VetHome(){
     }
     console.log(selected_ficha.peso)
     console.log(selected_ficha.examenes)
+    const obtainW = useRef(null)
     const [pesoInput, setPesoInput] = useState()
     const SeccionFicha = (props) => {
         if(compFicha===true){
@@ -74,8 +75,8 @@ export default function VetHome(){
                             <p className='minititle'>Examenes</p>
                             
                                 {
-                                    selected_ficha.examenes.map(examen => (
-                                        <Container key={examen.fecha}>
+                                    selected_ficha.examenes.map((examen, index) => (
+                                        <Container key={index}>
                                             <p> Tipo: {examen.tipo} | Fecha: {examen.fecha} </p>
                                         </Container>
                                     ))
@@ -86,8 +87,10 @@ export default function VetHome(){
                             <p className='minititle'>Vacunaciones</p>
                             <ul>
                                 {
-                                    selected_ficha.vacunaciones.map(examen => (
-                                        <li > {examen} </li>
+                                    selected_ficha.vacunaciones.map((examen, index) => (
+                                        <Container key={index}>
+                                            <p> Tipo: {examen.tipo} | Fecha: {examen.fecha} </p>
+                                        </Container>
                                     ))
                                 }
                             </ul>
@@ -96,8 +99,10 @@ export default function VetHome(){
                             <p className='minititle'>Operaciones</p>
                             <ul>
                                 {
-                                    selected_ficha.operaciones.map(examen => (
-                                        <li> {examen} </li>
+                                    selected_ficha.operaciones.map((examen, index) => (
+                                        <Container key={index}>
+                                            <p> Tipo: {examen.tipo} | Fecha: {examen.fecha} </p>
+                                        </Container>
                                     ))
                                 }
                             </ul>
@@ -111,7 +116,7 @@ export default function VetHome(){
                 setPesoInput(e.target.value)
             }
             const handleSubmit = () => {
-                let aux = pesoInput
+                let aux = obtainW.current.value
                 let plantilla = {
                     codigo: selected_horse.codigo_caballo,
                     peso: aux,
@@ -143,8 +148,8 @@ export default function VetHome(){
                                         <Form.Control
                                         type='text'
                                         placeholder='999.999'
-                                        value={pesoInput}
-                                        onChange={handleChange}
+                                        ref={obtainW}
+                                        onChange={ () => console.log(obtainW.current.value) }
                                         autoFocus
                                         />
                                     </Form.Group>
