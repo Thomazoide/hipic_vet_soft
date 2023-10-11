@@ -44,4 +44,19 @@ Usuarios.statics.signup = async function(tipo, nombre, rut, email, cell, pass, c
     return user
 }
 
+Usuarios.statics.login = async function(rut, pass){
+    if(!rut || !pass){
+        throw Error('Debe rellenar los campos...')
+    }
+    const user = await this.findOne({rut: rut})
+    if(!user){
+        throw Error('Rut incorrecto...')
+    }
+    const match = await bcrypt.compare(pass, user.pass)
+    if(!match){
+        throw Error('Contrasena incorrecta...')
+    }
+    return user
+}
+
 module.exports = model("usuarios", Usuarios)
