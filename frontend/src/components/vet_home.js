@@ -1,6 +1,7 @@
 import './interfaz_generic.css'
 import {useEffect, useState, useRef} from 'react'
 import {Container, Button, ButtonGroup, Modal, Form} from 'react-bootstrap'
+import {useAuthContext} from './../hooks/useLoginContext'
 import axios from 'axios'
 
 
@@ -15,27 +16,41 @@ export default function VetHome(){
     const [selected_ficha, setSelected_ficha] = useState({})
     const mostrarVentana = () => setModalFicha(true)
     const cerrarVentana = () => setModalFicha(false)
+    const {user} = useAuthContext()
     console.log(selection)
     useEffect( () => {
-        axios.get('http://localhost:4444/api/caballos').then( response => {
-            let arr = []
-            for(let h of response.data){
-                arr.push(h)
-            }
-            setHorses(arr)
-            setSelected_horse(arr[0])
-            setSelection(arr[0].codigo_caballo)
-            setIsLoading(false)
-        } )
-        axios.get('http://localhost:4444/api/fichas').then( response => {
-            let arr = []
-            for(let f of response.data){
-                arr.push(f)
-            }
-            setFichas(arr)
-            setSelected_ficha(arr[0])
-        } )
-    }, [] )
+        if(user){
+            axios.request({
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                },
+                method: 'GET',
+                url: 'http://localhost:4444/api/caballos'}).then( response => {
+                let arr = []
+                for(let h of response.data){
+                    arr.push(h)
+                }
+                setHorses(arr)
+                setSelected_horse(arr[0])
+                setSelection(arr[0].codigo_caballo)
+                setIsLoading(false)
+            } )
+            axios.request({
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                },
+                method: 'GET',
+                url: 'http://localhost:4444/api/fichas'}).then( response => {
+                    console.log(response.data)
+                    let arr = []
+                    for(let f of response.data){
+                        arr.push(f)
+                    }
+                    setFichas(arr)
+                    setSelected_ficha(arr[0])
+            } )
+        }
+    }, [user] )
     console.log(horses)
     console.log(fichas)
     const regExChange = () => {

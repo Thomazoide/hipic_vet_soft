@@ -5,6 +5,7 @@ import {useAuthContext} from './../hooks/useLoginContext'
 import axios from 'axios'
 
 
+
 export default function VetFichas(){
     const [] = useState(false)
     const [fichas, setFichas] = useState([])
@@ -27,27 +28,33 @@ export default function VetFichas(){
         date = date.toISOString().split('T')[0]
 
         localStorage.setItem('fecha', date)
-        localStorage.setItem('tipo', 'null')
-        axios.get('http://localhost:4444/api/fichas', {
-            headers: ''
-        }).then( res => {
-            let arr = []
-            console.log(res.data)
-            for(let f of res.data){
-                arr.push(f)
-            }
-            setFichas(arr)
-        } )
-        axios.get('http://localhost:4444/api/caballos').then( res => {
-            let arr = []
-            console.log(res.data)
-            for(let h of res.data){
-                arr.push(h)
-            }
-            setCaballos(arr)
-        } )
+        const getCaballos = async() => {
+            const response = await fetch('http://localhost:4444/api/caballos', {
+                'type': 'GET',
+                'headers': {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            const json = await response.json()
+            console.log(json)
+            setCaballos(json)
+        }
+        const getFichas = async() => {
+            const response = await fetch('http://localhost:4444/api/fichas', {
+                'type': 'GET',
+                'headers': {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
+            const json = await response.json()
+            setFichas(json)
+        }
+        if(user){
+            getCaballos()
+            getFichas()
+        }
         
-    }, [] )
+    }, [user] )
 
     const generarLista = () => {
         let aux1 = caballos
