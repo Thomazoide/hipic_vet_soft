@@ -1,6 +1,8 @@
 const {Router} = require('express')
 const {getFichas, crearFicha, updateFicha, deleteFicha} = require('./../controllers/ficha_medica.control')
+const requireAuth = require('./../middlewares/requireAuth')
 const router = Router()
+router.use(requireAuth)
 router.route('/')
     .get(getFichas)
     .post(crearFicha)

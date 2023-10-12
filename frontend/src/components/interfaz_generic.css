@@ -12,6 +12,17 @@ body{
     padding: 5px;
 }
 
+.err-block{
+    margin: 2vh;
+    padding: 2vh;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: red;
+    background-color: #da775f;
+    color: black;
+}
+
 .barra_nav{
     
     text-align: center;

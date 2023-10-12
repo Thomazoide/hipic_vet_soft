@@ -1,6 +1,7 @@
 import './interfaz_generic.css'
 import { useState, useEffect, useRef } from "react"
 import { Button, Container, Dropdown, Form, Modal, Spinner, Alert } from 'react-bootstrap'
+import {useAuthContext} from './../hooks/useLoginContext'
 import axios from 'axios'
 
 
@@ -18,6 +19,7 @@ export default function VetFichas(){
     const [evc, setEcv] = useState('')
     const tipoInput = useRef(null)
     const descInyec = useRef(null)
+    const {user} = useAuthContext()
 
 
     useEffect( () => {
@@ -26,7 +28,9 @@ export default function VetFichas(){
 
         localStorage.setItem('fecha', date)
         localStorage.setItem('tipo', 'null')
-        axios.get('http://localhost:4444/api/fichas').then( res => {
+        axios.get('http://localhost:4444/api/fichas', {
+            headers: ''
+        }).then( res => {
             let arr = []
             console.log(res.data)
             for(let f of res.data){
