@@ -31,6 +31,7 @@ body{
     font-weight: bold;
 }
 
+
 .displayer{
     text-align: left;
 }
@@ -92,4 +93,23 @@ body{
 
 .boton-seleccion{
     margin: 1vh;
+}
+
+.bloque-position{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.bloque-login{
+    padding: 5vh;
+    max-width: 40vh;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    color: white;
+    border: outset;
+    border-color: beige;
+    border-radius: 5px;
 }
