@@ -7,7 +7,7 @@ import axios from 'axios'
 
 
 export default function VetFichas(){
-    const [] = useState(false)
+    //const [] = useState(false)
     const [fichas, setFichas] = useState([])
     const [caballos, setCaballos] = useState([])
     const [selection, setSelection] = useState('')
@@ -16,7 +16,7 @@ export default function VetFichas(){
     const [lista, setLista] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
-    const [tipoSel, setTipoSel] = useState('')
+    //const [tipoSel, setTipoSel] = useState('')
     const [evc, setEcv] = useState('')
     const tipoInput = useRef(null)
     const descInyec = useRef(null)

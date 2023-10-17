@@ -1,4 +1,5 @@
 import {createContext, useReducer, useEffect} from 'react'
+import axios from 'axios'
 
 export const AuthContext = createContext()
 
@@ -18,11 +19,25 @@ export const AuthContextProvider = ({children}) => {
         user: null
     })
 
+    const verifyToken = async (userData) => {
+        let stts = 0
+        try{
+            const response = await axios.put('http://localhost:4444/api/login', userData)
+            if(response){
+                console.log(response)
+                dispatch({type: 'LOGIN', payload: userData})
+            }
+        }catch(err){
+            console.log(err.response)
+            localStorage.removeItem('userData')
+        }
+    }
+
     useEffect( () => {
         const user = JSON.parse(localStorage.getItem('userData'))
         console.log(user)
         if(user){
-            dispatch({type: 'LOGIN', payload: user})
+            verifyToken(user)
         }
     }, [] )
 
