@@ -20,7 +20,6 @@ export const AuthContextProvider = ({children}) => {
     })
 
     const verifyToken = async (userData) => {
-        let stts = 0
         try{
             const response = await axios.put('http://localhost:4444/api/login', userData)
             if(response){

@@ -1,11 +1,26 @@
-import {useRef} from 'react'
+import {useRef, useEffect} from 'react'
+import { useNavigate } from 'react-router'
 import {Container, Navbar, Form, Button} from 'react-bootstrap'
+import { useAuthContext } from '../hooks/useLoginContext'
 import { useLogin } from '../hooks/useLogin'
+import jwt_decode from 'jwt-decode'
 
 export default function InterfazLogin(){
     const rut = useRef(null)
     const pass = useRef(null)
+    const navegador = useNavigate()
+    const {user} = useAuthContext()
     const {login, error, isLoading} = useLogin()
+
+    useEffect( () => {
+        if(user){
+            const userData = jwt_decode(user.token)
+            console.log(userData)
+            if(userData.tipo === 'veterinario'){
+                navegador('/vet-user')
+            }
+        }
+    }, [user] )
 
     const handleSubmit = async (event) => {
         event.preventDefault()

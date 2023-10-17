@@ -2,6 +2,11 @@ body{
     background-color: #282c34;
 }
 
+.nav-logout{
+    display: flex;
+    float: right;
+}
+
 .btn-crear{
     justify-content: center;
     align-items: center;
@@ -24,7 +29,9 @@ body{
 }
 
 .barra_nav{
-    
+    padding: 0%;
+    margin: 0%;
+    width: 100%;
     text-align: center;
     justify-content: center;
 }
@@ -36,6 +43,10 @@ body{
 .ficha-info{
     display: flex;
     flex-direction: row;
+}
+
+.navbar{
+    width: 100%;
 }
 
 .minititle{
@@ -61,6 +72,9 @@ body{
 }
 
 .cuerpo{
+    padding: 0%;
+    margin: 0%;
+    width: 100%;
     background-color:#222c41;
     min-height: 100vh;
     color: white;

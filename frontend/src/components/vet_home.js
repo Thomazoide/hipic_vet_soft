@@ -3,9 +3,11 @@ import {useEffect, useState, useRef} from 'react'
 import {Container, Button, ButtonGroup, Modal, Form} from 'react-bootstrap'
 import {useAuthContext} from './../hooks/useLoginContext'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 
 export default function VetHome(){
+    const [userData, setUserData] = useState({})
     const [horses, setHorses] = useState([])
     const [fichas, setFichas] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -20,6 +22,8 @@ export default function VetHome(){
     console.log(selection)
     useEffect( () => {
         if(user){
+            let usrdt = jwt_decode(user.token)
+            setUserData(usrdt)
             axios.request({
                 headers: {
                     Authorization: `Bearer ${user.token}`
@@ -28,7 +32,9 @@ export default function VetHome(){
                 url: 'http://localhost:4444/api/caballos'}).then( response => {
                 let arr = []
                 for(let h of response.data){
-                    arr.push(h)
+                    if(h.codigo_equipo === usrdt.cod_equipo){
+                        arr.push(h)
+                    }
                 }
                 setHorses(arr)
                 setSelected_horse(arr[0])
