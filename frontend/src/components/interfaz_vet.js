@@ -8,7 +8,7 @@ import VetHome from "./vet_home"
 import VetFichas from "./vet_fichas"
 
 function InterfazVet(){
-    const navegar = useNavigate()
+    //const navegar = useNavigate()
     const {logout} = useLogout()
 
     const [fichaWindow, setFichaWindow] = useState(false)
