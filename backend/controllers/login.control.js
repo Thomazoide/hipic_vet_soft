@@ -18,4 +18,14 @@ loginCtrl.login = async (req, res) => {
     }
 }
 
+loginCtrl.verToken = async (req, res) => {
+    const tkn = req.body.token
+    try{
+        const vrftkn = jwt.verify(tkn, process.env.SECRET)
+        res.status(200).json(vrftkn)
+    }catch(err){
+        res.status(403).json(err)
+    }
+}
+
 module.exports = loginCtrl

@@ -3,11 +3,12 @@ import { useState, useEffect, useRef } from "react"
 import { Button, Container, Dropdown, Form, Modal, Spinner, Alert } from 'react-bootstrap'
 import {useAuthContext} from './../hooks/useLoginContext'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 
 
 export default function VetFichas(){
-    const [] = useState(false)
+    const [userData, setUserData] = useState({})
     const [fichas, setFichas] = useState([])
     const [caballos, setCaballos] = useState([])
     const [selection, setSelection] = useState('')
@@ -16,7 +17,6 @@ export default function VetFichas(){
     const [lista, setLista] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
-    const [tipoSel, setTipoSel] = useState('')
     const [evc, setEcv] = useState('')
     const tipoInput = useRef(null)
     const descInyec = useRef(null)
@@ -24,6 +24,7 @@ export default function VetFichas(){
 
 
     useEffect( () => {
+        let usrdt = jwt_decode(user.token)
         let date = new Date()
         date = date.toISOString().split('T')[0]
 
@@ -37,7 +38,13 @@ export default function VetFichas(){
             })
             const json = await response.json()
             console.log(json)
-            setCaballos(json)
+            let arr = []
+            for(let c of json){
+                if(c.codigo_equipo === usrdt.cod_equipo){
+                    arr.push(c)
+                }
+            }
+            setCaballos(arr)
         }
         const getFichas = async() => {
             const response = await fetch('http://localhost:4444/api/fichas', {
@@ -50,6 +57,8 @@ export default function VetFichas(){
             setFichas(json)
         }
         if(user){
+            setUserData(jwt_decode(user.token))
+            console.log(jwt_decode(user.token))
             getCaballos()
             getFichas()
         }
