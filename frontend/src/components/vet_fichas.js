@@ -365,10 +365,10 @@ export default function VetFichas(){
                     </Container>
                     <Container className='lista-caballos'>
                         <ModalCrear/>
-                        <Container className='seccion-ficha'>
+                        <Container className='seccion-ficha p-0'>
                             <h3>Peso: {selected_ficha.peso["$numberDecimal"]} Kg </h3>
                             <hr/>
-                            <Container className='ficha-info' >
+                            <Container className='ficha-info p-0' >
                                 <Container className='big-displayer'>
                                     <Container className='btn-crear'>
                                         <p className='minititle'>Exámenes</p>
@@ -401,7 +401,7 @@ export default function VetFichas(){
                                         ) )
                                     }
                                 </Container>
-                                <Container className='big-displayer'>
+                                <Container className='big-displayer '>
                                     <Container className='btn-crear'>
                                         <p className='minititle'>Cirujías</p>
                                         <Button variant='outline-success' size='sm' value={'cirujia'} onClick={mostrarModal}>Agregar cirujia</Button>

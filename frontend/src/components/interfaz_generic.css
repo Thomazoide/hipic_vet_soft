@@ -1,11 +1,13 @@
 body{
-    background-color: #282c34;
+    background-color: #23272e;
 }
 
 .nav-logout{
     display: flex;
     float: right;
 }
+
+
 
 .btn-crear{
     justify-content: center;
@@ -75,7 +77,7 @@ body{
     padding: 0%;
     margin: 0%;
     width: 100%;
-    background-color:#222c41;
+    background-color:#23272e;
     min-height: 100vh;
     color: white;
 }
@@ -88,13 +90,30 @@ body{
     
 }
 
+.lista-preps{
+    margin: 50px;
+    max-height: 700px;
+    max-width: 40vh;
+    background-color: #222c41;
+    border-style: outset;
+    border-color: beige;
+    border-width: 3px;
+    border-radius: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
 .lista-caballos{
-    max-height: 90vh;
+    justify-content: space-between;
+    max-height: 700px;
+    max-width: 100vh;
+    background-color: #222c41;
     border-color: beige;
     border-style: outset;
     border-width: 3px;
     border-radius: 5px;
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 .caballo{
@@ -137,4 +156,8 @@ body{
     border: outset;
     border-color: beige;
     border-radius: 5px;
+}
+
+.seccion-ficha{
+    justify-content: space-between;
 }
