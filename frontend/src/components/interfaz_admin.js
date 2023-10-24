@@ -1,12 +1,25 @@
 import {useEffect, useState} from 'react'
 import {Container, Button, Navbar, Nav, Image} from 'react-bootstrap'
+import { useNavigate } from 'react-router'
 import logo from './../assets/horse-32.ico'
 import AdminPreps from './adm_preps'
+import { useLogout } from '../hooks/useLogout'
+import { useAuthContext } from '../hooks/useLoginContext'
 
 export default function InterfazAdmin(){
     const [verPreps, setVerPreps] = useState(true)
     const [verNots, setVerNots] = useState(false)
     const [verFichas, setVerFichas] = useState(false)
+    const {logout} = useLogout()
+    const {user} = useAuthContext()
+    const navegador = useNavigate()
+
+    useEffect( () => {
+        if(!user){
+            navegador('/')
+        }
+    }, [user] )
+
     const verPreparadores = () => {
         setVerNots(false)
         setVerFichas(false)
@@ -22,6 +35,9 @@ export default function InterfazAdmin(){
         setVerNots(false)
         setVerFichas(true)
     }
+    const handleLogout = () => {
+        logout()
+    }
     return(
         <Container className='cuerpo p-0' fluid>
             <Container className='barra_nav p-0' fluid>
@@ -35,7 +51,7 @@ export default function InterfazAdmin(){
                             <Nav.Link href='#' onClick={verFichasVeterinarias} >Ver fichas veterinarias</Nav.Link>
                         </Nav>
                         <Container>
-                            <Button variant='outline-light'>Cerrar sesión</Button>
+                            <Button variant='outline-light' onClick={handleLogout} >Cerrar sesión</Button>
                         </Container>
                     </Navbar.Collapse>
                 </Navbar>

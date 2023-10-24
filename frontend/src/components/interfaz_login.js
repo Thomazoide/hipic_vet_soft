@@ -20,6 +20,9 @@ export default function InterfazLogin(){
             if(userData.tipo === 'veterinario'){
                 navegador('/vet-user')
             }
+            if(userData.tipo === 'admin'){
+                navegador('/admin')
+            }
         }
     }, [user] )
 

@@ -1,7 +1,8 @@
-import React, {useState} from "react"
-//import {useNavigate} from 'react-router-dom'
+import React, {useState, useEffect} from "react"
+import {useNavigate} from 'react-router-dom'
 import {Container, Navbar, Nav, Button, Image} from 'react-bootstrap'
 import { useLogout } from "../hooks/useLogout"
+import { useAuthContext } from "../hooks/useLoginContext"
 import logo from './../assets/horse-32.ico'
 import './interfaz_generic.css'
 
@@ -9,8 +10,9 @@ import VetHome from "./vet_home"
 import VetFichas from "./vet_fichas"
 
 function InterfazVet(){
-    //const navegar = useNavigate()
+    const navegar = useNavigate()
     const {logout} = useLogout()
+    const {user} = useAuthContext()
 
     const [fichaWindow, setFichaWindow] = useState(false)
 
@@ -20,6 +22,10 @@ function InterfazVet(){
     const handleLogout = () => {
         logout()
     }
+
+    useEffect( () => {
+        navegar('/')
+    }, [user])
 
     if(!fichaWindow){
         return(

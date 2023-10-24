@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route path='/' element={ <InterfazLogin/> }/>
       <Route path="/vet-user" element={user ? <InterfazVet/> : <InterfazLogin/> }/>
-      <Route path="/admin" element={ <InterfazAdmin/> }/>
+      <Route path="/admin" element={user ? <InterfazAdmin/> : <InterfazLogin/> }/>
     </Routes>
   );
 }
