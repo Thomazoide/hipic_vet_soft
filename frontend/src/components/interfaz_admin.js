@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import {Container, Button, Navbar, Nav, Image} from 'react-bootstrap'
 import { useNavigate } from 'react-router'
+import jwt_decode from 'jwt-decode'
 import logo from './../assets/horse-32.ico'
 import AdminPreps from './adm_preps'
 import { useLogout } from '../hooks/useLogout'
@@ -17,6 +18,12 @@ export default function InterfazAdmin(){
     useEffect( () => {
         if(!user){
             navegador('/')
+        }
+        if(user){
+            let usrdt = jwt_decode(user.token)
+            if(usrdt.tipo != 'admin'){
+                navegador('/')
+            }
         }
     }, [user] )
 
@@ -59,6 +66,8 @@ export default function InterfazAdmin(){
             <hr/>
             <Container className='bloque-position'>
                 { verPreps ? <AdminPreps/> : null}
+                { verNots ? <Container className='lista-caballos' /> : null }
+                { verFichas ? <Container className='lista-caballos'/> : null }
             </Container>
 
         </Container>

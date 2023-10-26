@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import {Container, Navbar, Nav, Button, Image} from 'react-bootstrap'
 import { useLogout } from "../hooks/useLogout"
 import { useAuthContext } from "../hooks/useLoginContext"
+import jwt_decode from 'jwt-decode'
 import logo from './../assets/horse-32.ico'
 import './interfaz_generic.css'
 
@@ -24,8 +25,16 @@ function InterfazVet(){
     }
 
     useEffect( () => {
-        navegar('/')
-    }, [user])
+        if(!user){
+            navegar('/')
+        }
+        if(user){
+            let usrdt = jwt_decode(user.token)
+            if(usrdt.tipo != 'veterinario'){
+                navegar('/')
+            }
+        }
+    }, [user] )
 
     if(!fichaWindow){
         return(

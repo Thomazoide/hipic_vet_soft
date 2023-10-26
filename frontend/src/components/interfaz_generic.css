@@ -7,7 +7,17 @@ body{
     float: right;
 }
 
+.preps-info{
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
 
+.vert-btns{
+    max-width: 124px;
+    align-self: center;
+}
 
 .btn-crear{
     justify-content: center;
@@ -90,10 +100,46 @@ body{
     
 }
 
+.cellInput{
+    display: flex;
+    flex-direction: row;
+    align-content: stretch;
+    margin-bottom: 5px;
+}
+
+.prefix{
+    align-self: center;
+    margin-right: 5px;
+}
+
+.cellTF{
+    padding-bottom: 20px;
+}
+
+.btn-crear-prep{
+    margin: 15px;
+}
+
 .lista-preps{
-    margin: 50px;
+    flex-grow: 1;
+    flex-basis: 300px;
+    min-width: 200px;
     max-height: 700px;
-    max-width: 80vh;
+    max-width: 400px;
+    background-color: #222c41;
+    border-style: outset;
+    border-color: beige;
+    border-width: 3px;
+    border-radius: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.lista-crear-preps{
+    flex-grow: 1;
+    flex-basis: 300px;
+    min-width: 200px;
+    max-height: 700px;
+    max-width: 400px;
     background-color: #222c41;
     border-style: outset;
     border-color: beige;

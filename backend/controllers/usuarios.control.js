@@ -26,4 +26,14 @@ userCtrl.setUser = async (req, res) => {
     }
 }
 
+userCtrl.delUser = async (req, res) => {
+    try{
+        const {_id} = req.body
+        await Usuarios.findByIdAndDelete({_id})
+        res.status(200).json({message: 'Eliminado con exito...'})
+    }catch(err){
+        res.status(400).json({message: 'Error al eliminar...', error: err.message})
+    }
+}
+
 module.exports = userCtrl
