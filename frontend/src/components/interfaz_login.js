@@ -1,9 +1,10 @@
 import {useRef, useEffect} from 'react'
 import { useNavigate } from 'react-router'
-import {Container, Navbar, Form, Button} from 'react-bootstrap'
+import {Container, Navbar, Form, Button, Image} from 'react-bootstrap'
 import { useAuthContext } from '../hooks/useLoginContext'
 import { useLogin } from '../hooks/useLogin'
 import jwt_decode from 'jwt-decode'
+import logo from './../assets/horse-32.ico'
 
 export default function InterfazLogin(){
     const rut = useRef(null)
@@ -19,6 +20,9 @@ export default function InterfazLogin(){
             if(userData.tipo === 'veterinario'){
                 navegador('/vet-user')
             }
+            if(userData.tipo === 'admin'){
+                navegador('/admin')
+            }
         }
     }, [user] )
 
@@ -28,10 +32,10 @@ export default function InterfazLogin(){
     }
 
     return(
-        <Container fluid className='cuerpo'>
-            <Container fluid className='barra-nav'>
+        <Container fluid className='cuerpo p-0'>
+            <Container fluid className='barra-nav p-0'>
                 <Navbar variant='success' bg='success'>
-                    <Navbar.Brand className='navTitle' as='h1'>Hipic Vet-Soft</Navbar.Brand>
+                    <Navbar.Brand className='navTitle' as='h1'> <Image src={logo}/> Hipic Vet-Soft</Navbar.Brand>
                 </Navbar>
             </Container>
             <Container>

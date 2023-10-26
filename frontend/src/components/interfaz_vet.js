@@ -1,15 +1,19 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import {useNavigate} from 'react-router-dom'
-import {Container, Navbar, Nav, Button} from 'react-bootstrap'
+import {Container, Navbar, Nav, Button, Image} from 'react-bootstrap'
 import { useLogout } from "../hooks/useLogout"
+import { useAuthContext } from "../hooks/useLoginContext"
+import jwt_decode from 'jwt-decode'
+import logo from './../assets/horse-32.ico'
 import './interfaz_generic.css'
 
 import VetHome from "./vet_home"
 import VetFichas from "./vet_fichas"
 
 function InterfazVet(){
-    //const navegar = useNavigate()
+    const navegar = useNavigate()
     const {logout} = useLogout()
+    const {user} = useAuthContext()
 
     const [fichaWindow, setFichaWindow] = useState(false)
 
@@ -20,20 +24,33 @@ function InterfazVet(){
         logout()
     }
 
+    useEffect( () => {
+        if(!user){
+            navegar('/')
+        }
+        if(user){
+            let usrdt = jwt_decode(user.token)
+            if(usrdt.tipo != 'veterinario'){
+                navegar('/')
+            }
+        }
+    }, [user] )
+
     if(!fichaWindow){
         return(
             <Container className="cuerpo p-0" fluid>
                 <Container className="barra_nav p-0" fluid>
-                    <Navbar variant="success" bg="success" className="navbar">
-                        <Navbar.Brand className='navTitle' as='h1'>Hipic Vet-Soft</Navbar.Brand>
-                        <Container className="navOpc" fluid>
-                            <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                            <Nav className="me-auto">
-                                <Nav.Link href="#" onClick={ir_inicio}>Inicio</Nav.Link>
-                                <Nav.Link href='#' onClick={verFichas}>Gestionar fichas</Nav.Link>
-                            </Nav>
-                        </Container>
-                        <Navbar.Collapse className="justify-content-end">
+                    <Navbar variant="success" bg="success" className="navbar" collapseOnSelect expand='sm'>
+                        <Navbar.Brand className='navTitle' as='h1'> <Image src={logo}/> Hipic Vet-Soft</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+                        <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-*-between">
+                            <Container className="navOpc" fluid>
+                                
+                                <Nav className="me-auto">
+                                    <Nav.Link href="#" onClick={ir_inicio}>Inicio</Nav.Link>
+                                    <Nav.Link href='#' onClick={verFichas}>Gestionar fichas</Nav.Link>
+                                </Nav>
+                            </Container>
                             <Container>
                                 <Button variant="outline-light" onClick={handleLogout}>Cerrar sesión</Button>
                             </Container>
@@ -48,18 +65,19 @@ function InterfazVet(){
         )
     }else{
         return(
-            <Container className="cuerpo" fluid>
-                <Container className="barra_nav" fluid>
-                    <Navbar variant="success" bg="success">
-                        <Navbar.Brand className='navTitle' as='h1'>Hipic Vet-Soft</Navbar.Brand>
-                        <Container className="navOpc">
-                            <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                            <Nav className="me-auto">
-                                <Nav.Link href="/vet-user">Inicio</Nav.Link>
-                                <Nav.Link href='#'>Gestionar fichas</Nav.Link>
-                            </Nav>
-                        </Container>
-                        <Navbar.Collapse className="justify-content-end">
+            <Container className="cuerpo p-0" fluid>
+                <Container className="barra_nav p-0" fluid>
+                    <Navbar variant="success" bg="success" className="navbar" collapseOnSelect expand='sm'>
+                        <Navbar.Brand className='navTitle' as='h1'> <Image src={logo}/> Hipic Vet-Soft</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+                        <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-*-between">
+                            <Container className="navOpc" fluid>
+                                
+                                <Nav className="me-auto">
+                                    <Nav.Link href="#" onClick={ir_inicio}>Inicio</Nav.Link>
+                                    <Nav.Link href='#' onClick={verFichas}>Gestionar fichas</Nav.Link>
+                                </Nav>
+                            </Container>
                             <Container>
                                 <Button variant="outline-light" onClick={handleLogout}>Cerrar sesión</Button>
                             </Container>
