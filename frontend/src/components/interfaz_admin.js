@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router'
 import jwt_decode from 'jwt-decode'
 import logo from './../assets/horse-32.ico'
 import AdminPreps from './adm_preps'
+import AdminNots from './adm_nots'
+import AdminFichas from './adm_fichas'
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useLoginContext'
 
@@ -66,8 +68,8 @@ export default function InterfazAdmin(){
             <hr/>
             <Container className='bloque-position'>
                 { verPreps ? <AdminPreps/> : null}
-                { verNots ? <Container className='lista-caballos' /> : null }
-                { verFichas ? <Container className='lista-caballos'/> : null }
+                { verNots ? <AdminNots/> : null }
+                { verFichas ? <AdminFichas/> : null }
             </Container>
 
         </Container>

@@ -28,6 +28,7 @@ app.use('/api/users', require('./../routes/usuarios.routes'))
 app.use('/api/caballos', require('./../routes/caballos.routes'))
 app.use('/api/fichas', require('./../routes/ficha_medica.routes'))
 app.use('/api/login', require('./../routes/login.routes'))
+app.use('/api/notis', require('../routes/notificaciones.routes'))
 
 /*app.use('/assets', express.static(path.join(__dirname, 'public/assets')))*/
 

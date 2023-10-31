@@ -73,6 +73,8 @@ export default function AdminPreps(){
                 console.log(res)
                 setExito(true)
             })
+            let auxUsrs = preparadores
+            auxUsrs.push(cuerpo)
         }catch(err){
             console.log(err)
             setError(true)
@@ -92,9 +94,117 @@ export default function AdminPreps(){
             }).then( res => {
                 console.log(res)
             } )
+            let auxPreps = preparadores
+            let filtPreps = auxPreps.filter( function (prep) { return prep.rut != auxPrep.rut } )
+            setPreparadores(filtPreps)
+            setSelectedPrep(filtPreps[0])
         }catch(err){
             console.log(err)
         }
+    }
+
+    if(preparadores.length < 1){
+        return(
+            <div className='preps-info'>
+                <div className='ficha-info'>
+                    <Container className='lista-crear-preps'>
+                        <h1>Crear preparadores</h1>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>
+                                    Nombre
+                                </Form.Label>
+                                <Form.Control 
+                                required
+                                size='sm'
+                                type='text'
+                                placeholder='...'
+                                ref={nombre} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>
+                                    Tipo de usuario
+                                </Form.Label>
+                                <Form.Control 
+                                size='sm'
+                                type='text'
+                                defaultValue='preparador'
+                                disabled />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>
+                                    Rut
+                                </Form.Label>
+                                <Form.Control 
+                                size='sm'
+                                type='text'
+                                placeholder='Rut sin puntos y con guion'
+                                ref={rut} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>
+                                    Email
+                                </Form.Label>
+                                <Form.Control
+                                size='sm' 
+                                type='email'
+                                placeholder='...'
+                                ref={email} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>
+                                    Celular
+                                </Form.Label>
+                                <Container className='cellInput'>
+                                    <p className='prefix'>
+                                        +56
+                                    </p>
+                                    <Form.Control 
+                                    size='sm' 
+                                    type='text'
+                                    placeholder='...'
+                                    ref={cell} />                    
+                                </Container>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>
+                                    Contraseña
+                                </Form.Label>
+                                <Form.Control 
+                                size='sm'
+                                type='password'
+                                ref={pass} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>
+                                    Codigo de equipo
+                                </Form.Label>
+                                <Form.Control 
+                                size='sm'
+                                type='text'
+                                placeholder='...'
+                                ref={cod_equipo} />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>
+                                    Corrales en posesion
+                                </Form.Label>
+                                <Form.Control 
+                                size='sm'
+                                type='text'
+                                placeholder='...'
+                                ref={corrales_en_posesion} />
+                            </Form.Group>
+                            <Form.Group className='btn-crear-prep'>
+                                <Container>
+                                    <Button variant='success' onClick={handleCrearPrep}> Crear usuario </Button>
+                                </Container>
+                            </Form.Group>
+                        </Form>
+                    </Container>
+                </div>
+            </div>
+        )
     }
 
     return(
@@ -161,7 +271,7 @@ export default function AdminPreps(){
                         </Form.Label>
                         <Form.Control
                         size='sm' 
-                        type='text'
+                        type='email'
                         placeholder='...'
                         ref={email} />
                     </Form.Group>

@@ -146,7 +146,7 @@ export default function VetHome(){
                     operaciones: []
                 }
                 console.log(plantilla)
-                axios.post('http://localhost:4444/api/fichas', {codigo: plantilla.codigo, peso: plantilla.peso, examenes: plantilla.examenes, vacunaciones: plantilla.vacunaciones, operaciones: plantilla.operaciones })
+                axios.post('http://localhost:4444/api/fichas', {codigo: plantilla.codigo, peso: plantilla.peso, examenes: plantilla.examenes, vacunaciones: plantilla.vacunaciones, operaciones: plantilla.operaciones }, {headers: {Authorization: `Bearer ${user.token}`}})
             }
             console.log(pesoInput)
             return(

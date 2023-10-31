@@ -19,6 +19,8 @@ body{
     align-self: center;
 }
 
+
+
 .btn-crear{
     justify-content: center;
     align-items: center;
@@ -116,6 +118,18 @@ body{
     padding-bottom: 20px;
 }
 
+.botones-admin{
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.boton-admin{
+    flex-grow: 1;
+    flex-basis: 300px;
+}
+
 .btn-crear-prep{
     margin: 15px;
 }
@@ -125,7 +139,7 @@ body{
     flex-basis: 300px;
     min-width: 200px;
     max-height: 700px;
-    max-width: 400px;
+    max-width: 300px;
     background-color: #222c41;
     border-style: outset;
     border-color: beige;

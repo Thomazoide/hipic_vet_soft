@@ -5,6 +5,7 @@ import InterfazAdmin from './components/interfaz_admin';
 import './App.css';
 import './../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import { useAuthContext } from './hooks/useLoginContext';
+import TestingComp from './components/testing_component';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Route path='/' element={ <InterfazLogin/> }/>
       <Route path="/vet-user" element={<InterfazVet/> }/>
       <Route path="/admin" element={ <InterfazAdmin/> }/>
+      <Route path='/testing-route' element={ <TestingComp/> }/>
     </Routes>
   );
 }

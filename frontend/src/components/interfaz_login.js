@@ -14,6 +14,9 @@ export default function InterfazLogin(){
     const {login, error, isLoading} = useLogin()
 
     useEffect( () => {
+        let date = new Date()
+        date = date.toISOString().split('T')[0]
+        localStorage.setItem('fecha', date)
         if(user){
             const userData = jwt_decode(user.token)
             console.log(userData)
