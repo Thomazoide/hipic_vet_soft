@@ -136,7 +136,7 @@ export default function AdminNots(){
                 {
                     notis.data.map( noti => (
                         <>
-                            <Container>
+                            <Container key={noti.descripcion}>
                                 <p className='minititle' > {noti.titulo} </p>
                                 <p> {noti.descripcion} </p>
                                 <Button variant='outline-danger' size='sm' >Eliminar notificacion</Button>
