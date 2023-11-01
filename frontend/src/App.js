@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import InterfazVet from './components/interfaz_vet'
 import InterfazLogin from './components/interfaz_login';
 import InterfazAdmin from './components/interfaz_admin';
+import InterfazPreparador from './components/interfaz_prep';
 import './App.css';
 import './../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import { useAuthContext } from './hooks/useLoginContext';
@@ -16,6 +17,7 @@ function App() {
       <Route path="/vet-user" element={<InterfazVet/> }/>
       <Route path="/admin" element={ <InterfazAdmin/> }/>
       <Route path='/testing-route' element={ <TestingComp/> }/>
+      <Route path='/preparador' element={ <InterfazPreparador/> }/>
     </Routes>
   );
 }

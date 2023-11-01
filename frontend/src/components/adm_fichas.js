@@ -15,6 +15,7 @@ export default function AdminFichas(){
     const [isTeamSelected, setIsTeamSelected] = useState(false)
     const [isHorseSelected, setIsHorseSelected] = useState(false)
     const [filteredHorses, setFilteredHorses] = useState([])
+    const [horses, setHorses] = useState([])
     const [fne, setFne] = useState(false)
     
     const caballos = useQuery({
@@ -65,9 +66,9 @@ export default function AdminFichas(){
     const autoSeleccion = () => {
         setIsFichaSelected(false)
         let auxHorse = selectedHorse
-        let auxFichas = fichas.data
+        //let auxFichas = fichas.data
         let resSel = null
-        for(let f of auxFichas){
+        for(let f of fichas.data){
             if(auxHorse.codigo_caballo === f.codigo){
                 resSel = f
             }
@@ -85,9 +86,9 @@ export default function AdminFichas(){
     const filtrarCaballos = (st) => {
         console.log(caballos.data)
         setIsHorseSelected(false)
-        let auxHorses = caballos.data
+        //let auxHorses = caballos.data
         let arr = []
-        for(let h of auxHorses){
+        for(let h of caballos.data){
             if(h.codigo_equipo === st){
                 arr.push(h)
             }
@@ -117,12 +118,20 @@ export default function AdminFichas(){
                 resSel = f
             }
         } )
+        let selHs = null
+        for(let h of caballos.data){
+            if(h.codigo_caballo === e){
+                selHs = h
+            }
+        }
         if(resSel){
+            setSelectedHorse(selHs)
             setSelectedFicha(resSel)
             setIsHorseSelected(true)
             setIsFichaSelected(true)
             setFne(false)
         }else{
+            setSelectedHorse(selHs)
             setFne(true)
             setIsFichaSelected(false)
         }
@@ -205,6 +214,26 @@ export default function AdminFichas(){
     }
 
     if(caballos.isLoading || fichas.isLoading){
+        return(
+            <Container className='preps-info'>
+                <Container>
+                    <Spinner variant='success'/>
+                </Container>
+            </Container>
+        )
+    }
+
+    if(caballos.isError || fichas.isError){
+        return(
+            <Container className='preps-info'>
+                <Container>
+                    <Spinner variant='success'/>
+                </Container>
+            </Container>
+        )
+    }
+
+    if(caballos.isFetching || fichas.isFetching){
         return(
             <Container className='preps-info'>
                 <Container>
