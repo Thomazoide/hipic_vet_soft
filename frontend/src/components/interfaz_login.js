@@ -26,6 +26,9 @@ export default function InterfazLogin(){
             if(userData.tipo === 'admin'){
                 navegador('/admin')
             }
+            if(userData.tipo === 'preparador'){
+                navegador('/preparador')
+            }
         }
     }, [user] )
 

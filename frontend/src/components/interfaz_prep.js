@@ -4,6 +4,7 @@ import { Container, Button, Navbar, Nav, Image } from "react-bootstrap"
 import { useAuthContext } from "../hooks/useLoginContext"
 import { useLogout } from "../hooks/useLogout"
 import { useNavigate } from "react-router"
+import PrepVets from "./prep_vets"
 import jwt_decode from 'jwt-decode'
 import logo from '../assets/horse-32.ico'
 
@@ -62,7 +63,7 @@ export default function InterfazPreparador(){
             </Container>
             <hr/>
             <Container className="bloque-position">
-                {verVets ? <Container className="lista-caballos"/> : null}
+                {verVets ? <PrepVets/> : null}
                 {verCaballos ? <Container className="lista-caballos"/> : null}
                 {verNotificaciones ? <Container className="lista-caballos"/> : null}
             </Container>

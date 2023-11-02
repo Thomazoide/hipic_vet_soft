@@ -1,4 +1,5 @@
 import {createContext, useReducer, useEffect} from 'react'
+import { useNavigate } from 'react-router'
 import axios from 'axios'
 
 export const AuthContext = createContext()
@@ -29,6 +30,7 @@ export const AuthContextProvider = ({children}) => {
         }catch(err){
             console.log(err.response)
             localStorage.removeItem('userData')
+            dispatch({type: 'LOGOUT'})
         }
     }
 
