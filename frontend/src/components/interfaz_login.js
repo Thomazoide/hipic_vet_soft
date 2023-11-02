@@ -14,14 +14,20 @@ export default function InterfazLogin(){
     const {login, error, isLoading} = useLogin()
 
     useEffect( () => {
+        let date = new Date()
+        date = date.toISOString().split('T')[0]
+        localStorage.setItem('fecha', date)
         if(user){
             const userData = jwt_decode(user.token)
             console.log(userData)
             if(userData.tipo === 'veterinario'){
-                navegador('/vet-user')
+                navegador(`/vet-user#${(user.token).split('.')[0]}`)
             }
             if(userData.tipo === 'admin'){
-                navegador('/admin')
+                navegador(`/admin#${(user.token).split('.')[0]}`)
+            }
+            if(userData.tipo === 'preparador'){
+                navegador(`/preparador#${(user.token).split('.')[0]}`)
             }
         }
     }, [user] )

@@ -36,4 +36,14 @@ userCtrl.delUser = async (req, res) => {
     }
 }
 
+userCtrl.getUser = async (req, res) => {
+    try{
+        const {_id} = req.body
+        const payload = await Usuarios.findById({_id})
+        res.status(200).json(payload)
+    }catch(err){
+        res.status(404).json({mensaje: 'USUARIO NO ENCONTRADO...'})
+    }
+}
+
 module.exports = userCtrl

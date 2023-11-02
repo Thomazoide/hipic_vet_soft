@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useAuthContext } from "./useLoginContext"
+import jwt_decode from 'jwt-decode'
 
 export const useLogin = () => {
     const [error, setError] = useState(null)
@@ -16,7 +17,10 @@ export const useLogin = () => {
         })
         console.log(response)
         const json = await response.json()
+        
+        json.usrData = jwt_decode(json.token)
         console.log(json)
+        
         if(!response.ok){
             setIsLoading(false)
             setError(json.detail)

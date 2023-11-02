@@ -15,7 +15,7 @@ const requireAuth = async (req, res, next) => {
         next()
     }catch(err){
         console.log(err)
-        res.status(401).json({error: 'No autorizado'})
+        res.status(401).json({mensaje: 'TIMEDOUT'})
     }
 }
 
