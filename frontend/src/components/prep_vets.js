@@ -36,17 +36,6 @@ export default function PrepVets(){
             }
         }
     })
-
-    useEffect( () => {
-        if(user){
-            console.log(user.usrData)
-            if(user.usrData.tipo != 'preparador'){
-                navegar('/')
-            }
-        }else{
-            navegar('/')
-        }
-    }, [user] )
     
     useEffect( () => {
         if(veterinarios.isSuccess){
@@ -102,7 +91,7 @@ export default function PrepVets(){
         }
     }
 
-    if(veterinarios.isLoading || veterinarios.isFetching || veterinarios.isError || veterinarios.isLoadingError){
+    if(veterinarios.isLoading || veterinarios.isFetching){
         return(
             <Container className='lista-caballos'>
                 <Spinner variant='success'/>
@@ -110,7 +99,7 @@ export default function PrepVets(){
         )
     }
 
-    if(!user){
+    if(!user || veterinarios.isError || veterinarios.isLoadingError){
         return(
             <Container className='lista-caballos'>
                 <h4>Se terminó el tiempo de conexión...<br/>Debe iniciar sesión nuevamente.</h4>

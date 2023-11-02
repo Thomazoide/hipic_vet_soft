@@ -14,7 +14,7 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={ <InterfazLogin/> }/>
-      <Route path="/vet-user" element={<InterfazVet/> }/>
+      <Route path='/vet-user' element={<InterfazVet/> }/>
       <Route path="/admin" element={ <InterfazAdmin/> }/>
       <Route path='/testing-route' element={ <TestingComp/> }/>
       <Route path='/preparador' element={ <InterfazPreparador/> }/>

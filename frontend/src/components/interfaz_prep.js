@@ -1,18 +1,17 @@
-import { useQuery } from "react-query"
 import { useState, useEffect } from "react"
 import { Container, Button, Navbar, Nav, Image } from "react-bootstrap"
 import { useAuthContext } from "../hooks/useLoginContext"
 import { useLogout } from "../hooks/useLogout"
 import { useNavigate } from "react-router"
 import PrepVets from "./prep_vets"
-import jwt_decode from 'jwt-decode'
+import PrepHorses from "./prep_horses"
 import logo from '../assets/horse-32.ico'
 
 export default function InterfazPreparador(){
     const {user} = useAuthContext()
     const {logout} = useLogout()
 
-    const navegador = useNavigate()
+    const navegar = useNavigate()
 
     const [verVets, setVerVets] = useState(true)
     const [verCaballos, setVerCaballos] = useState(false)
@@ -40,6 +39,17 @@ export default function InterfazPreparador(){
         logout()
     }
 
+    useEffect( () => {
+        if(user){
+            console.log(user.usrData)
+            if(user.usrData.tipo != 'preparador'){
+                navegar('/')
+            }
+        }else{
+            navegar('/')
+        }
+    }, [user] )
+
     return(
         <Container className="cuerpo p-0" fluid>
             <Container className="barra_nav p-0" fluid>
@@ -64,7 +74,7 @@ export default function InterfazPreparador(){
             <hr/>
             <Container className="bloque-position">
                 {verVets ? <PrepVets/> : null}
-                {verCaballos ? <Container className="lista-caballos"/> : null}
+                {verCaballos ? <PrepHorses/> : null}
                 {verNotificaciones ? <Container className="lista-caballos"/> : null}
             </Container>
         </Container>

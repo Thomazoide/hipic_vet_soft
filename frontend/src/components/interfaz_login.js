@@ -21,13 +21,13 @@ export default function InterfazLogin(){
             const userData = jwt_decode(user.token)
             console.log(userData)
             if(userData.tipo === 'veterinario'){
-                navegador('/vet-user')
+                navegador(`/vet-user#${(user.token).split('.')[0]}`)
             }
             if(userData.tipo === 'admin'){
-                navegador('/admin')
+                navegador(`/admin#${(user.token).split('.')[0]}`)
             }
             if(userData.tipo === 'preparador'){
-                navegador('/preparador')
+                navegador(`/preparador#${(user.token).split('.')[0]}`)
             }
         }
     }, [user] )
