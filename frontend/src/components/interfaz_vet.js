@@ -22,6 +22,7 @@ function InterfazVet(){
 
     const handleLogout = () => {
         logout()
+        navegar('/')
     }
 
     useEffect( () => {

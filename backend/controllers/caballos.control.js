@@ -8,13 +8,7 @@ horseCtrl.getHorses = async (req, res) => {
 }
 
 horseCtrl.setHorse = async (req, res) => {
-    const {nombre, peso, propietario, codigo} = req.body
-    const newHorse = new Caballos({
-        nombre: nombre,
-        peso: peso,
-        propietario: propietario,
-        codigo: codigo
-    })
+    const newHorse = new Caballos(req.body)
     await newHorse.save()
     res.json(newHorse)
 }
