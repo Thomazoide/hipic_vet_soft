@@ -1,0 +1,238 @@
+body{
+    background-color: #23272e;
+}
+
+.select-view{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 360px;
+}
+
+.nav-logout{
+    display: flex;
+    float: right;
+}
+
+.preps-info{
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.vert-btns{
+    max-width: 124px;
+    align-self: center;
+}
+
+
+
+.btn-crear{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: outset;
+    border-width: 2px;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.err-block{
+    margin: 2vh;
+    padding: 2vh;
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: red;
+    background-color: #da775f;
+    color: black;
+}
+
+.barra_nav{
+    padding: 0%;
+    margin: 0%;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+.opciones{
+    display: flex;
+}
+
+.ficha-info{
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar{
+    width: 100%;
+}
+
+.minititle{
+    font-weight: bold;
+}
+
+
+.displayer{
+    text-align: left;
+}
+
+.navTitle{
+    margin-left: 5vh;
+}
+
+.bloque{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 15vh;
+    margin-right: 15vh;
+    
+}
+
+.cuerpo{
+    padding: 0%;
+    margin: 0%;
+    width: 100%;
+    background-color:#23272e;
+    min-height: 100vh;
+    color: white;
+}
+
+.list{
+    display: flex;
+    flex-direction: row;
+    border-color: black;
+    border-width: 2vh;
+    
+}
+
+.cellInput{
+    display: flex;
+    flex-direction: row;
+    align-content: stretch;
+    margin-bottom: 5px;
+}
+
+.prefix{
+    align-self: center;
+    margin-right: 5px;
+}
+
+.cellTF{
+    padding-bottom: 20px;
+}
+
+.botones-admin{
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.boton-admin{
+    flex-grow: 1;
+    flex-basis: 300px;
+}
+
+.btn-crear-prep{
+    margin: 15px;
+}
+
+.vet-sec{
+    flex-grow: 1;
+    flex-basis: 300px;
+    max-width: 360px;
+}
+
+.lista-preps{
+    padding: 15px;
+    flex-grow: 1;
+    flex-basis: 300px;
+    min-width: 200px;
+    max-height: 700px;
+    max-width: 300px;
+    background-color: #222c41;
+    border-style: outset;
+    border-color: beige;
+    border-width: 3px;
+    border-radius: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.lista-crear-preps{
+    padding: 15px;
+    flex-grow: 1;
+    flex-basis: 300px;
+    min-width: 200px;
+    max-height: 700px;
+    max-width: 400px;
+    background-color: #222c41;
+    border-style: outset;
+    border-color: beige;
+    border-width: 3px;
+    border-radius: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.lista-caballos{
+    justify-content: space-between;
+    max-height: 700px;
+    max-width: 100vh;
+    background-color: #222c41;
+    border-color: beige;
+    border-style: outset;
+    border-width: 3px;
+    border-radius: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.caballo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.botones{
+    margin: 5vh;
+}
+
+.boton-ficha{
+    margin-right: 15vh;
+    margin-left: 15vh;
+}
+
+.logoHorse{
+    max-height: 10vh;
+}
+
+.boton-seleccion{
+    margin: 1vh;
+}
+
+.bloque-position{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.bloque-login{
+    padding: 5vh;
+    max-width: 40vh;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    color: white;
+    border: outset;
+    border-color: beige;
+    border-radius: 5px;
+}
+
+.seccion-ficha{
+    justify-content: space-between;
+}
