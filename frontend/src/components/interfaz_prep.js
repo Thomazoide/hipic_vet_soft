@@ -37,6 +37,7 @@ export default function InterfazPreparador(){
 
     const handleLogout = () => {
         logout()
+        navegar("/")
     }
 
     useEffect( () => {

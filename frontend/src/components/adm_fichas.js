@@ -243,49 +243,51 @@ export default function AdminFichas(){
         )
     }
 
-    return(
-        <Container>
-            <Container className='botones-admin'>
-                <Container className='boton-admin'>
-                    <p>Selección de equipo</p>
-                    <Dropdown onSelect={onSelection} >
-                        <Dropdown.Toggle variant='success' size='sm' >
-                            {selectedTeam}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            {
-                                equipos.map( e => (
-                                    <Dropdown.Item  eventKey={e} key={e}> {e} </Dropdown.Item>
-                                ) )
-                            }
-                        </Dropdown.Menu>
-                    </Dropdown>
+    if(caballos.data && fichas.data){
+        return(
+            <Container>
+                <Container className='botones-admin'>
+                    <Container className='boton-admin'>
+                        <p>Selección de equipo</p>
+                        <Dropdown onSelect={onSelection} >
+                            <Dropdown.Toggle variant='success' size='sm' >
+                                {selectedTeam}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                {
+                                    equipos.map( e => (
+                                        <Dropdown.Item  eventKey={e} key={e}> {e} </Dropdown.Item>
+                                    ) )
+                                }
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Container>
+                    <Container className='boton-admin'>
+                        <p>Selección de caballo</p>
+                        {
+                            isTeamSelected ? <BotonEquipos/> : <Spinner variant='success' size='sm'/>
+                        }
+                    </Container>
                 </Container>
-                <Container className='boton-admin'>
-                    <p>Selección de caballo</p>
+                <hr/>
+                <Container className='lista-caballos'>
+                    <Container className='list'>
+                        { isHorseSelected ? <Container className='data'>
+                            <p> Nombre: {selectedHorse.nombre} </p>
+                            <p> Propietario: {selectedHorse.propietario} </p>
+                        </Container> : null}
+                    </Container>
+                    <hr/>
                     {
-                        isTeamSelected ? <BotonEquipos/> : <Spinner variant='success' size='sm'/>
+                        isFichaSelected ? <SeccionFicha/> : <Spinner variant='success' size='lg' />
+                    }
+                    {
+                        fne ? <Container>
+                            <h3>Ficha no existente...</h3>
+                        </Container> : null
                     }
                 </Container>
             </Container>
-            <hr/>
-            <Container className='lista-caballos'>
-                <Container className='list'>
-                    { isHorseSelected ? <Container className='data'>
-                        <p> Nombre: {selectedHorse.nombre} </p>
-                        <p> Propietario: {selectedHorse.propietario} </p>
-                    </Container> : null}
-                </Container>
-                <hr/>
-                {
-                    isFichaSelected ? <SeccionFicha/> : <Spinner variant='success' size='lg' />
-                }
-                {
-                    fne ? <Container>
-                        <h3>Ficha no existente...</h3>
-                    </Container> : null
-                }
-            </Container>
-        </Container>
-    )
+        )
+    }
 }

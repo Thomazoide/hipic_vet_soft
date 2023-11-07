@@ -140,21 +140,21 @@ export default function VetFichas(){
         if(tipoInput){
             if(evc === 'examen'){
                 auxFicha.examenes.push(aux)
-                await axios.put('http://localhost:4444/api/fichas', auxFicha)
+                await axios.put('http://localhost:4444/api/fichas', auxFicha, {headers: {Authorization: `Bearer ${user.token}`}})
                 setShowAlert(true)
                 setShowModal(false)
             }
             if(evc === 'vacuna'){
                 aux.descripcion = descInyec.current.value
                 auxFicha.vacunaciones.push(aux)
-                await axios.put('http://localhost:4444/api/fichas', auxFicha)
+                await axios.put('http://localhost:4444/api/fichas', auxFicha, {headers: {Authorization: `Bearer ${user.token}`}})
                 setShowAlert(true)
                 setShowModal(false)
             }
             if(evc === 'cirujia'){
                 aux.descripcion = descInyec.current.value
                 auxFicha.operaciones.push(aux)
-                await axios.put('http://localhost:4444/api/fichas', auxFicha)
+                await axios.put('http://localhost:4444/api/fichas', auxFicha, {headers: {Authorization: `Bearer ${user.token}`}})
                 setShowAlert(true)
                 setShowModal(false)
             }
