@@ -5,6 +5,7 @@ import { useLogout } from "../hooks/useLogout"
 import { useNavigate } from "react-router"
 import PrepVets from "./prep_vets"
 import PrepHorses from "./prep_horses"
+import Notificaciones from "./notificaciones"
 import logo from '../assets/horse-32.ico'
 
 export default function InterfazPreparador(){
@@ -76,7 +77,7 @@ export default function InterfazPreparador(){
             <Container className="bloque-position">
                 {verVets ? <PrepVets/> : null}
                 {verCaballos ? <PrepHorses/> : null}
-                {verNotificaciones ? <Container className="lista-caballos"/> : null}
+                {verNotificaciones ? <Notificaciones/> : null}
             </Container>
         </Container>
     )

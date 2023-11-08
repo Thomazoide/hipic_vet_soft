@@ -8,10 +8,11 @@ FmedicaCtrl.getFichas = async (req, res) => {
 }
 
 FmedicaCtrl.crearFicha = async (req, res) => {
-    const {codigo, peso, examenes, vacunaciones, operaciones} = req.body
+    const {codigo, peso, habilitado, examenes, vacunaciones, operaciones} = req.body
     const nueva_ficha = new Fmedica({
         codigo: codigo,
         peso: peso,
+        habilitado: habilitado,
         examenes: examenes,
         vacunaciones: vacunaciones,
         operaciones: operaciones

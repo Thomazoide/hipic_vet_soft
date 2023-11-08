@@ -243,7 +243,7 @@ export default function AdminFichas(){
         )
     }
 
-    if(caballos.data && fichas.data){
+    if(Array.isArray(caballos.data) && Array.isArray(fichas.data) ){
         return(
             <Container>
                 <Container className='botones-admin'>

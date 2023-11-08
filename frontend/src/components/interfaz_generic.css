@@ -14,6 +14,20 @@ body{
     float: right;
 }
 
+.sec-not{
+    margin: 15px;
+    padding: 20px;
+    border: outset;
+    border-color: black;
+    border-radius: 15px;
+}
+
+.not-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
 .preps-info{
     display: flex;
     align-content: space-around;

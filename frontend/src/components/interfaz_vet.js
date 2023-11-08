@@ -9,16 +9,34 @@ import './interfaz_generic.css'
 
 import VetHome from "./vet_home"
 import VetFichas from "./vet_fichas"
+import Notificaciones from "./notificaciones"
 
 function InterfazVet(){
     const navegar = useNavigate()
     const {logout} = useLogout()
     const {user} = useAuthContext()
 
-    const [fichaWindow, setFichaWindow] = useState(false)
+    const [verInicio, setVerInicio] = useState(true)
+    const [verFich, setVerFichas] = useState(false)
+    const [verNots, setVerNots] = useState(false)
 
-    const verFichas = () => setFichaWindow(true)
-    const ir_inicio = () => setFichaWindow(false)
+    const toggleInicio = () => {
+        setVerFichas(false)
+        setVerNots(false)
+        setVerInicio(true)
+    }
+
+    const toggleFichas = () => {
+        setVerInicio(false)
+        setVerNots(false)
+        setVerFichas(true)
+    }
+
+    const toggleNots = () => {
+        setVerInicio(false)
+        setVerFichas(false)
+        setVerNots(true)
+    }
 
     const handleLogout = () => {
         logout()
@@ -37,7 +55,7 @@ function InterfazVet(){
         }
     }, [user] )
 
-    if(!fichaWindow){
+    
         return(
             <Container className="cuerpo p-0" fluid>
                 <Container className="barra_nav p-0" fluid>
@@ -48,8 +66,9 @@ function InterfazVet(){
                             <Container className="navOpc" fluid>
                                 
                                 <Nav className="me-auto">
-                                    <Nav.Link href="#" onClick={ir_inicio}>Inicio</Nav.Link>
-                                    <Nav.Link href='#' onClick={verFichas}>Gestionar fichas</Nav.Link>
+                                    <Nav.Link href="#" onClick={toggleInicio}>Inicio</Nav.Link>
+                                    <Nav.Link href='#' onClick={toggleFichas}>Gestionar fichas</Nav.Link>
+                                    <Nav.Link href="#" onClick={toggleNots}>Ver notificaciones</Nav.Link>
                                 </Nav>
                             </Container>
                             <Container>
@@ -60,38 +79,13 @@ function InterfazVet(){
                 </Container>
                 <hr/>
                 <Container fluid>
-                    <VetHome/>
+                    {verInicio ? <VetHome/> : null}
+                    {verFich ? <VetFichas/> : null}
+                    {verNots ? <Notificaciones/> : null}
                 </Container>
             </Container>
         )
-    }else{
-        return(
-            <Container className="cuerpo p-0" fluid>
-                <Container className="barra_nav p-0" fluid>
-                    <Navbar variant="success" bg="success" className="navbar" collapseOnSelect expand='sm'>
-                        <Navbar.Brand className='navTitle' as='h1'> <Image src={logo}/> Hipic Vet-Soft</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
-                        <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-*-between">
-                            <Container className="navOpc" fluid>
-                                
-                                <Nav className="me-auto">
-                                    <Nav.Link href="#" onClick={ir_inicio}>Inicio</Nav.Link>
-                                    <Nav.Link href='#' onClick={verFichas}>Gestionar fichas</Nav.Link>
-                                </Nav>
-                            </Container>
-                            <Container>
-                                <Button variant="outline-light" onClick={handleLogout}>Cerrar sesión</Button>
-                            </Container>
-                        </Navbar.Collapse>
-                    </Navbar>
-                </Container>
-                <hr/>
-                <Container fluid>
-                    <VetFichas/>
-                </Container>
-            </Container>
-        )
-    }
+    
 }
 
 export default InterfazVet

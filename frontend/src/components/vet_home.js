@@ -18,8 +18,8 @@ export default function VetHome(){
     const [selected_ficha, setSelected_ficha] = useState({})
     const mostrarVentana = () => setModalFicha(true)
     const cerrarVentana = () => setModalFicha(false)
+    const isHab = useRef(null)
     const {user} = useAuthContext()
-    console.log(selection)
     useEffect( () => {
         if(user){
             let usrdt = jwt_decode(user.token)
@@ -57,8 +57,7 @@ export default function VetHome(){
             } )
         }
     }, [user] )
-    console.log(horses)
-    console.log(fichas)
+
     const regExChange = () => {
         for(let f of fichas){
             let valor = selected_horse.codigo_caballo
@@ -133,14 +132,13 @@ export default function VetHome(){
             )
         }else{
             
-            const handleChange = (e) => {
-                setPesoInput(e.target.value)
-            }
+            
             const handleSubmit = () => {
                 let aux = obtainW.current.value
                 let plantilla = {
                     codigo: selected_horse.codigo_caballo,
                     peso: aux,
+                    habilitado: isHab.current.value,
                     examenes: [],
                     vacunaciones: [],
                     operaciones: []
@@ -148,7 +146,6 @@ export default function VetHome(){
                 console.log(plantilla)
                 axios.post('http://localhost:4444/api/fichas', {codigo: plantilla.codigo, peso: plantilla.peso, examenes: plantilla.examenes, vacunaciones: plantilla.vacunaciones, operaciones: plantilla.operaciones }, {headers: {Authorization: `Bearer ${user.token}`}})
             }
-            console.log(pesoInput)
             return(
                 <Container>
                     
@@ -173,6 +170,13 @@ export default function VetHome(){
                                         onChange={ () => console.log(obtainW.current.value) }
                                         autoFocus
                                         />
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label>Se encuentra hablitado para correr?</Form.Label>
+                                        <Form.Select ref={isHab}>
+                                            <option value={true} key={1}>Si</option>
+                                            <option value={false} key={2}>No</option>
+                                        </Form.Select>
                                     </Form.Group>
                                     <Form.Group className='mb-3' controlId='horseCode'>
                                         <Form.Label>Codigo de caballo: {selected_horse.codigo_caballo}</Form.Label>
