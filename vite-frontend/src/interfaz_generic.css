@@ -9,6 +9,12 @@ body{
     max-width: 360px;
 }
 
+.spread-data{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 .nav-logout{
     display: flex;
     float: right;

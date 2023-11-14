@@ -326,7 +326,9 @@ export default function AdminPreps({query}){
                                 <p> Propietario: {horse.propietario} </p>
                                 <p> Corral: {horse.codigo_corral} </p>
                                 {
-                                    (horse.ficha[0]) ? <p className='text-success'> El caballo tiene una ficha creada </p> : <p className='text-danger'> El caballo no tiene una ficha creada </p>
+                                    (horse.ficha[0]) ? <p className='text-success'> 
+                                    El caballo tiene una ficha creada </p> : <p className='text-danger'> 
+                                    El caballo no tiene una ficha creada </p>
                                 }
                                 <hr/>
                             </div>

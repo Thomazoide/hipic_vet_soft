@@ -5,6 +5,8 @@ import { useLogout } from './../hooks/useLogout'
 import { useAuthContext } from "../hooks/useAuthContext"
 import { useQuery } from 'react-query'
 import AdminPreps from "../components/admin_preps"
+import AdminNots from "../components/admin_nots"
+import AdminFichas from "../components/admin_fichas"
 import cfg from '../cfg.json'
 import axios from 'axios'
 import logo from './../assets/horse-32.ico'
@@ -15,6 +17,17 @@ export default function InterfazAdmin(){
     const [verFichas, setVerFichas] = useState(false)
     const {logout} = useLogout()
     const {user} = useAuthContext()
+    const notis = useQuery({
+        queryKey: ['notis'],
+        queryFn: async () => {
+            if(user){
+                const res = await axios.get(cfg.ruta+'/api/notis', {headers: {Authorization: `Bearer ${user.token}`}})
+                if(res.statusText === 'OK'){
+                    return res.data
+                }
+            }else return null
+        }
+    })
     const query = useQuery({
         queryKey: ['query'],
         queryFn: async () => {
@@ -114,8 +127,8 @@ export default function InterfazAdmin(){
             <hr/>
             <Container className="bloque-position">
                 {verPreps ? <AdminPreps query={query}/> : null}
-                {verNots ? <Container/> : null}
-                {verFichas ? <Container/> : null}
+                {verNots ? <AdminNots query={query} ntfcns={notis}/> : null}
+                {verFichas ? <AdminFichas query={query}/> : null}
             </Container>
         </Container>
     )

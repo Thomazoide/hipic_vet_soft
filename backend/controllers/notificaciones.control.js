@@ -27,7 +27,13 @@ NotiCtrl.crearNoti = async (req, res) => {
 
 NotiCtrl.delNoti = async (req, res) => {
     const {_id} = req.body
-    await Notificacion.findByIdAndDelete({_id})
+    try{
+        await Notificacion.findByIdAndDelete({_id})
+        res.status(200).json({mensaje: 'Exito al eliminar'})
+    }catch(err){
+        console.log(err)
+        res.status(400).json({mensaje: 'Error al eliminar'})
+    }
 }
 
 module.exports = NotiCtrl
