@@ -147,6 +147,12 @@ body{
     max-width: 360px;
 }
 
+.enrolador{
+    padding: 15px;
+    flex-grow: 1;
+    flex-basis: 300px;
+}
+
 .lista-preps{
     padding: 15px;
     flex-grow: 1;

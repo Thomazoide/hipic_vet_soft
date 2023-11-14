@@ -3,7 +3,6 @@ import { useNavigate } from "react-router"
 import {Container, Navbar, Form, Button, Image} from 'react-bootstrap'
 import { useAuthContext } from "../hooks/useAuthContext"
 import { useLogin } from "../hooks/useLogin"
-import { jwtDecode } from "jwt-decode"
 import logo from '../assets/horse-32.ico'
 import './../interfaz_generic.css'
 
@@ -59,7 +58,7 @@ export default function InterfazLogin(){
                             ref={pass} />
                         </Form.Group>
                         <Form.Group>
-                            <Button variant="success" type="submit">Iniciar sesión</Button>
+                            <Button variant="success" type="submit" >Iniciar sesión</Button>
                             {
                                 error && <Container className="err-block">
                                     {error}
