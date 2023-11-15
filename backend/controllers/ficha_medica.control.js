@@ -37,7 +37,7 @@ FmedicaCtrl.deleteFicha = async (req ,res) => {
     try{
         console.log('Result: ', auxF)
         await Fmedica.findByIdAndDelete(auxF._id)
-        return res.status(200).json({message: "Eliminado!"})
+        res.status(200).json({message: "Eliminado!"})
     }catch(err){
         console.log(err)
     }

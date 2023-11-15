@@ -10,7 +10,7 @@ horseCtrl.getHorses = async (req, res) => {
 horseCtrl.setHorse = async (req, res) => {
     const newHorse = new Caballos(req.body)
     await newHorse.save()
-    res.json(newHorse)
+    res.status(200).json(newHorse)
 }
 
 horseCtrl.delHorse = async (req, res) => {

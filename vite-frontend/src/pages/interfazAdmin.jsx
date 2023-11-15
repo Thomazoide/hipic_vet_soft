@@ -104,12 +104,13 @@ export default function InterfazAdmin(){
     }
     const handleLogout = () => {
         logout()
+        navegar('/')
     }
 
     return(
         <Container className="cuerpo p-0" fluid>
             <Container className="barra_nav p-0" fluid>
-            <Navbar variant='success' bg='success' className='navbar'collapseOnSelect expand='sm'>
+                <Navbar variant='success' bg='success' className='navbar'collapseOnSelect expand='sm'>
                     <Navbar.Brand as='h1' className='navTitle'> <Image src={logo}/> Hipic Vet-Soft</Navbar.Brand>
                     <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
                     <Navbar.Collapse id='responsive-navbar-nav' className='responsive-navbar-nav justify-content-*-between'>
