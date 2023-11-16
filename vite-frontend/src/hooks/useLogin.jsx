@@ -12,17 +12,20 @@ export const useLogin = () => {
     const login = async (rut, pass) => {
         setIsLoading(true)
         setError(null)
-        const res = await axios.post((cfg.ruta+'/api/login'), {rut: rut, pass: pass})
-        if(res.statusText === 'OK'){
-            const json = await res.data
-            json.usrData = jwtDecode(json.token)
-            console.log(json)
-            localStorage.setItem('userData', JSON.stringify(json))
-            dispatch({type: 'LOGIN', payload: json})
-            setIsLoading(false)
-        }else{
-            setIsLoading(false)
-            setError(json)
+        try{
+            await axios.post(cfg.ruta+'/api/login', {rut: rut, pass: pass}).then( res => {
+                if(res.statusText === 'OK'){
+                    let pl = res.data
+                    pl.usrData = jwtDecode(pl.token)
+                    localStorage.setItem('userData', JSON.stringify(pl))
+                    dispatch({type: 'LOGIN', payload: pl})
+                    setIsLoading(false)
+                }else{
+                    console.log(res)
+                }
+            } )
+        }catch(err){
+            setError(err.response.data.detail)
         }
     }
     return {login, isLoading, error}

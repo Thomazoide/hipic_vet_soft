@@ -38,7 +38,6 @@ export default function InterfazPrep(){
                         team.corrales = p.corrales_en_posesion
                     }
                 }
-                console.log(team)
                 return team
             }else return null
         }

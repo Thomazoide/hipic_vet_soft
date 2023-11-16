@@ -176,55 +176,61 @@ export default function PrepHorses({query}){
             <Container className='lista-crear-preps'>
                 <Form onSubmit={crearCaballo}>
                     <Form.Group>
-                        <Form.Label>Nombre de caballo</Form.Label>
-                        <Form.Control
-                        required
-                        type='text'
-                        size='sm'
-                        ref={nombre}
-                        placeholder='...'/>
+                        <Form.Label>
+                            Nombre de caballo
+                            <Form.Control
+                            id='nombre'
+                            required
+                            type='text'
+                            size='sm'
+                            ref={nombre}
+                            placeholder='...'/>
+                        </Form.Label>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Propietario del caballo
+                            <Form.Control
+                            id='propietario'
+                            required
+                            type='text'
+                            size='sm'
+                            ref={propietario}
+                            placeholder='Nombre apellido'/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        type='text'
-                        size='sm'
-                        ref={propietario}
-                        placeholder='Nombre apellido'/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Codigo de caballo
+                            <Form.Control
+                            id='codigo-c'
+                            required
+                            type='text'
+                            size='sm'
+                            ref={hcode}/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        type='text'
-                        size='sm'
-                        ref={hcode}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Codigo de equipo
+                            <Form.Control
+                            id='codigo-e'
+                            disabled
+                            size='sm'
+                            defaultValue={equipo}/>
                         </Form.Label>
-                        <Form.Control
-                        disabled
-                        size='sm'
-                        defaultValue={equipo}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Corral
+                            <Form.Select id='crr' ref={crr}>
+                                {
+                                    query.data.corrales.map( c => (
+                                        <option key={c} value={c}> {c} </option>
+                                    ) )
+                                }
+                            </Form.Select>
                         </Form.Label>
-                        <Form.Select ref={crr}>
-                            {
-                                query.data.corrales.map( c => (
-                                    <option key={c} value={c}> {c} </option>
-                                ) )
-                            }
-                        </Form.Select>
                     </Form.Group>
                     <Form.Group className='btn-crear-prep'>
                         <Container>

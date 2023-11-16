@@ -100,7 +100,6 @@ export default function PrepVets({query}){
                 }
             } )
         }catch(err){
-            console.log(err)
             setError(true)
         }
     }
@@ -186,80 +185,87 @@ export default function PrepVets({query}){
                     <Form.Group>
                         <Form.Label>
                             Nombre
+                            <Form.Control
+                            id='nombre'
+                            required
+                            type='text'
+                            size='sm'
+                            placeholder='nombre apellido'
+                            ref={nombre}/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        type='text'
-                        size='sm'
-                        placeholder='nombre apellido'
-                        ref={nombre}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Tipo de usuario
+                            <Form.Control
+                            id='tipo'
+                            size='sm'
+                            type='text'
+                            defaultValue={tipo}
+                            disabled/>
                         </Form.Label>
-                        <Form.Control
-                        size='sm'
-                        type='text'
-                        defaultValue={tipo}
-                        disabled/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Rut
+                            <Form.Control
+                            id='rut'
+                            required
+                            size='sm'
+                            type='text'
+                            placeholder='Rut sin puntos y con guion'
+                            ref={rut}/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        size='sm'
-                        type='text'
-                        placeholder='Rut sin puntos y con guion'
-                        ref={rut}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Email
+                            <Form.Control
+                            id='email'
+                            size='sm'
+                            type='email'
+                            defaultValue={''}
+                            ref={email}
+                            placeholder='******@****.***'/>
                         </Form.Label>
-                        <Form.Control
-                        size='sm'
-                        type='email'
-                        defaultValue={''}
-                        ref={email}
-                        placeholder='******@****.***'/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>
+                        <Form.Label for='cell'>
                             Celular
+                            <Container className='cellInput' >
+                                <p className='prefix'>+56</p>
+                                <Form.Control
+                                id='cell'
+                                defaultValue={''}
+                                size='sm'
+                                type='text'
+                                placeholder='9 digitos'
+                                ref={cell}/>
+                            </Container>
                         </Form.Label>
-                        <Container className='cellInput' >
-                            <p className='prefix'>+56</p>
-                            <Form.Control
-                            defaultValue={''}
-                            size='sm'
-                            type='text'
-                            placeholder='9 digitos'
-                            ref={cell}/>
-                        </Container>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Contraseña
+                            <Form.Control
+                            id='pass'
+                            size='sm'
+                            required
+                            type='password'
+                            placeholder='...'
+                            ref={pass}/>
                         </Form.Label>
-                        <Form.Control
-                        size='sm'
-                        required
-                        type='password'
-                        placeholder='...'
-                        ref={pass}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Codigo de equipo
+                            <Form.Control
+                            id='codigo'
+                            disabled
+                            size='sm'
+                            type='text'
+                            defaultValue={equipo}/>
                         </Form.Label>
-                        <Form.Control
-                        disabled
-                        size='sm'
-                        type='text'
-                        defaultValue={equipo}/>
                     </Form.Group>
                     <Form.Group className='btn-crear-prep'>
                         <Container>

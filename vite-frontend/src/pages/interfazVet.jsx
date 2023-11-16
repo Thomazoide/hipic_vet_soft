@@ -31,7 +31,6 @@ export default function InterfazVet(){
                         n.ficha = fchs.data.filter( f => f.codigo === n.codigo_caballo )
                     }
                 }
-                console.log(team)
                 return team
             }else return null
         }

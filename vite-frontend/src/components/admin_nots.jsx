@@ -54,7 +54,6 @@ export default function AdminNots({query, ntfcns}){
     const toggleError = () => setError(!error)
 
     const handleFilter = (event) => {
-        console.log(event)
         let indc /* in no data case */ = {
             titulo: '...',
             descripcion: 'No existen notificaciones que coincidan con la busqueda...',
@@ -66,6 +65,7 @@ export default function AdminNots({query, ntfcns}){
             setFiltro(event)
         }
         else if(event === 'all'){
+            setFiltro(event)
             aux = ntfcns.data.filter( n => n.target === 'all' )
             if(aux.length > 0){
                 setFilteredNots(aux)
@@ -74,6 +74,7 @@ export default function AdminNots({query, ntfcns}){
                 setFilteredNots(aux)
             }
         }else{
+            setFiltro(event)
             aux = ntfcns.data.filter( n => n.target === event )
             if(aux.length > 0){
                 setFilteredNots(aux)
@@ -168,28 +169,30 @@ export default function AdminNots({query, ntfcns}){
     const NotifData = () => {
         return(
             <>
-                <Dropdown onSelect={handleFilter} >
-                    <Dropdown.Toggle variant='success'>
-                        {
-                            (filtro === 'todo') ? <p>todas las notificaciones</p> : (filtro === 'all') ? <p>General</p> : filtro
-                        }
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item eventKey={'todo'} key={'todo'}>
-                            Todas las notificaciones
-                        </Dropdown.Item>
-                        <Dropdown.Item eventKey={'all'} key={'all'}>
-                            General
-                        </Dropdown.Item>
-                        {
-                            equipos.map( e => (
-                                <Dropdown.Item eventKey={e} key={e}>
-                                    {e}
-                                </Dropdown.Item>
-                            ) )
-                        }
-                    </Dropdown.Menu>
-                </Dropdown>
+                <Container fluid>
+                    <Dropdown onSelect={handleFilter} >
+                        <Dropdown.Toggle variant='success' size='lg'>
+                            {
+                                (filtro === 'todo') ? <p>todas las notificaciones</p> : (filtro === 'all') ? <p>General</p> : <p>{filtro}</p>
+                            }
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item eventKey={'todo'} key={'todo'}>
+                                Todas las notificaciones
+                            </Dropdown.Item>
+                            <Dropdown.Item eventKey={'all'} key={'all'}>
+                                General
+                            </Dropdown.Item>
+                            {
+                                equipos.map( e => (
+                                    <Dropdown.Item eventKey={e} key={e}>
+                                        {e}
+                                    </Dropdown.Item>
+                                ) )
+                            }
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Container>
                 <hr/>
                 {
                     filteredNots.map( noti => (

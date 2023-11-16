@@ -7,7 +7,6 @@ export default function Notificaciones({query}){
     useEffect( ()=>{
         if(query.data){
             if(query.data.notificaciones[0]){
-                console.log(query.data.notificaciones)
                 setNotList(query.data.notificaciones)
                 setRender(true)
             }

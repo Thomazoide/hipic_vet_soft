@@ -49,7 +49,14 @@ export default function AdminPreps({query}){
             cell: cell.current.value,
             pass: pass.current.value,
             cod_equipo: cod_equipo.current.value,
-            corrales_en_posesion: corrales_en_posesion.current.value
+        }
+        try{
+            let cep = corrales_en_posesion.current.value
+            cep = cep.split(',')
+            cep.forEach( x => x.trim() )
+            aux.corrales_en_posesion = cep
+        }catch(err){
+            aux.corrales_en_posesion = [corrales_en_posesion.current.value]
         }
         try{
             await axios.post(cfg.ruta+'/api/users', aux, {headers: {Authorization: `Bearer ${user.token}`}}).then( res => {
@@ -84,7 +91,6 @@ export default function AdminPreps({query}){
     }
 
     const handleChangePrep = (event) => {
-        console.log(event.target.value)
         let trgtRut = event.target.value
         for(let p of query.data){
             if(p.rut === trgtRut){
@@ -176,92 +182,100 @@ export default function AdminPreps({query}){
                     <Form.Group>
                         <Form.Label>
                             Nombre
-                        </Form.Label>
-                        <Form.Control
-                        required
-                        size='sm'
-                        type='text'
-                        placeholder='nombre apellido'
-                        ref={nombre}/>
+                            <Form.Control
+                            id='name'
+                            required
+                            size='sm'
+                            type='text'
+                            placeholder='nombre apellido'
+                            ref={nombre}/>
+                            </Form.Label>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Tipo de usuario
+                            <Form.Control
+                            id='tipo'
+                            size='sm'
+                            type='text'
+                            defaultValue={tipo}
+                            disabled/>
                         </Form.Label>
-                        <Form.Control
-                        size='sm'
-                        type='text'
-                        defaultValue={tipo}
-                        disabled/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Rut
+                            <Form.Control
+                            id='rut'
+                            required
+                            size='sm'
+                            type='text'
+                            placeholder='Rut sin puntos y con guion'
+                            ref={rut}/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        size='sm'
-                        type='text'
-                        placeholder='Rut sin puntos y con guion'
-                        ref={rut}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Email
-                        </Form.Label>
-                        <Form.Control
-                        required
-                        size='sm'
-                        type='email'
-                        placeholder='*****@*****.***'
-                        ref={email}/>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>
-                            celular
-                        </Form.Label>
-                        <Container className='cellInput'>
-                            <p className='prefix'>+56</p>
                             <Form.Control
+                            id='email'
                             required
                             size='sm'
-                            type='text'
-                            placeholder='9 digitos'
-                            ref={cell}/>
-                        </Container>
+                            type='email'
+                            placeholder='*****@*****.***'
+                            ref={email}/>
+                        </Form.Label>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label for='cell'>
+                            celular
+                            <Container className='cellInput'>
+                                <p className='prefix'>+56</p>
+                                <Form.Control
+                                id='cell'
+                                required
+                                size='sm'
+                                type='text'
+                                placeholder='9 digitos'
+                                ref={cell}/>
+                            </Container>
+                        </Form.Label>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Contraseña
+                            <Form.Control
+                            id='pass'
+                            required
+                            size='sm'
+                            type='password'
+                            placeholder='...'
+                            ref={pass}/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        size='sm'
-                        type='password'
-                        placeholder='...'
-                        ref={pass}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
                             Código de equipo
+                            <Form.Control
+                            id='cod'
+                            required
+                            size='sm'
+                            type='text'
+                            placeholder='...'
+                            ref={cod_equipo}/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        size='sm'
-                        type='text'
-                        placeholder='...'
-                        ref={cod_equipo}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
-                            Corrales en posesión
+                            Corrales en posesión    
+                            <Form.Control
+                            id='crr'
+                            required
+                            size='sm'
+                            type='text'
+                            placeholder='corral1, corral2, ... , corralN'
+                            ref={corrales_en_posesion}/>
                         </Form.Label>
-                        <Form.Control
-                        required
-                        size='sm'
-                        type='text'
-                        placeholder='corral1, corral2, ... , corralN'
-                        ref={corrales_en_posesion}/>
                     </Form.Group>
                     <Form.Group className='btn-crear-prep' >
                         <Container>
@@ -299,7 +313,11 @@ export default function AdminPreps({query}){
                     <p> Email: {selectedPrep.email} </p>
                     <p> Celular: {selectedPrep.cell} </p>
                     <p> Codigo de equipo: {selectedPrep.cod_equipo} </p>
-                    <p> Corrales en posesión: {selectedPrep.corrales_en_posesion} </p>
+                    <p> Corrales en posesión: 
+                        {
+                            selectedPrep.corrales_en_posesion.map( (c, i) => ( <i> {c}{ (i+1 == selectedPrep.corrales_en_posesion.length) ? null :  ','}  </i> ) )
+                        } 
+                    </p>
                     <hr/>
                     <Button variant='danger' onClick={handleDelete}>Eliminar preparador</Button>
                     <hr/>

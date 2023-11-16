@@ -52,10 +52,12 @@ export default function InterfazLogin(){
                             ref={rut} />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Contraseña</Form.Label>
-                            <Form.Control
-                            type="password"
-                            ref={pass} />
+                            <Form.Label>
+                                Contraseña
+                                <Form.Control
+                                type="password"
+                                ref={pass} />
+                                </Form.Label>
                         </Form.Group>
                         <Form.Group>
                             <Button variant="success" type="submit" >Iniciar sesión</Button>
