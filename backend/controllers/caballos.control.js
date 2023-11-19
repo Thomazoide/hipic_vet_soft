@@ -3,20 +3,33 @@ const Caballos = require('./../models/caballos')
 const horseCtrl = {}
 
 horseCtrl.getHorses = async (req, res) => {
-    const horses = await Caballos.find()
-    res.json(horses)
+    try{
+        const horses = await Caballos.find()
+        res.json(horses)
+    }catch(err){
+        res.status(400).json({mensaje: 'Error'})
+    }
 }
 
 horseCtrl.setHorse = async (req, res) => {
-    const {nombre, peso, propietario, codigo} = req.body
-    const newHorse = new Caballos({
-        nombre: nombre,
-        peso: peso,
-        propietario: propietario,
-        codigo: codigo
-    })
-    await newHorse.save()
-    res.json(newHorse)
+    try{    
+        const newHorse = new Caballos(req.body)
+        await newHorse.save()
+        res.status(200).json(newHorse)
+    }catch(err){
+        res.status(400).json({mensaje: 'Error'})
+    }
+    
+}
+
+horseCtrl.delHorse = async (req, res) => {
+    const {_id} = req.body
+    try{
+        await Caballos.findByIdAndDelete({_id: _id})
+        res.status(200).json({mensaje: 'Exito en la operación...'})
+    }catch(err){
+        res.status(400).json({mensaje: 'Error en la operación...'})
+    }
 }
 
 module.exports = horseCtrl

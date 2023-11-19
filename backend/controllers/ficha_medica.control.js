@@ -3,21 +3,30 @@ const Fmedica = require('./../models/ficha_medica')
 const FmedicaCtrl = {}
 
 FmedicaCtrl.getFichas = async (req, res) => {
-    const fichas = await Fmedica.find()
-    res.json(fichas)
+    try{    
+        const fichas = await Fmedica.find()
+        res.status(200).json(fichas)
+    }catch(err){
+        res.status(400).json({mensaje: 'Error'})
+    }
 }
 
 FmedicaCtrl.crearFicha = async (req, res) => {
-    const {codigo, peso, examenes, vacunaciones, operaciones} = req.body
-    const nueva_ficha = new Fmedica({
-        codigo: codigo,
-        peso: peso,
-        examenes: examenes,
-        vacunaciones: vacunaciones,
-        operaciones: operaciones
-    })
-    await nueva_ficha.save()
-    res.json(nueva_ficha)
+    try{    
+        const {codigo, peso, habilitado, examenes, vacunaciones, operaciones} = req.body
+        const nueva_ficha = new Fmedica({
+            codigo: codigo,
+            peso: peso,
+            habilitado: habilitado,
+            examenes: examenes,
+            vacunaciones: vacunaciones,
+            operaciones: operaciones
+        })
+        await nueva_ficha.save()
+        res.status(200).json(nueva_ficha)
+    }catch(err){
+        res.status(400).json({mensaje: 'Error'})
+    }
 }
 
 FmedicaCtrl.updateFicha = async (req, res) => {
@@ -36,7 +45,7 @@ FmedicaCtrl.deleteFicha = async (req ,res) => {
     try{
         console.log('Result: ', auxF)
         await Fmedica.findByIdAndDelete(auxF._id)
-        return res.status(200).json({message: "Eliminado!"})
+        res.status(200).json({message: "Eliminado!"})
     }catch(err){
         console.log(err)
     }

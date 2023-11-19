@@ -24,6 +24,7 @@ const Fmedica = new Schema({
         required: true,
     },
     peso: Schema.Types.Decimal128,
+    habilitado: Schema.Types.Boolean,
     examenes: [Object],
     vacunaciones: [Object],
     operaciones: [Object],
