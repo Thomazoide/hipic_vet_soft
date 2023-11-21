@@ -117,7 +117,7 @@ export default function InterfazAdmin(){
                         <Nav className='me-auto'>
                             <Nav.Link href='#' onClick={verPreparadores} >Gestionar preparadores</Nav.Link>
                             <Nav.Link href='#' onClick={verNotificaciones} >Gestionar notificaciones</Nav.Link>
-                            <Nav.Link href='#' onClick={verFichasVeterinarias} >Ver fichas veterinarias</Nav.Link>
+                            <Nav.Link href='#' onClick={verFichasVeterinarias} >Ver caballos habilitados</Nav.Link>
                         </Nav>
                         <Container>
                             <Button variant='outline-light' onClick={handleLogout} >Cerrar sesión</Button>
