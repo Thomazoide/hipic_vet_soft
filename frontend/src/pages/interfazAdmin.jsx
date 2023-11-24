@@ -7,14 +7,16 @@ import { useQuery } from 'react-query'
 import AdminPreps from "../components/admin_preps"
 import AdminNots from "../components/admin_nots"
 import AdminFichas from "../components/admin_fichas"
+import AdminHome from "../components/admin_home"
 import cfg from '../cfg.json'
 import axios from 'axios'
 import logo from './../assets/horse-32.ico'
 
 export default function InterfazAdmin(){
-    const [verPreps, setVerPreps] = useState(true)
+    const [verPreps, setVerPreps] = useState(false)
     const [verNots, setVerNots] = useState(false)
     const [verFichas, setVerFichas] = useState(false)
+    const [home, setHome] = useState(true)
     const {logout} = useLogout()
     const {user} = useAuthContext()
     const notis = useQuery({
@@ -32,49 +34,29 @@ export default function InterfazAdmin(){
         queryKey: ['query'],
         queryFn: async () => {
             if(user){
-                const usrs = await axios.get(cfg.ruta+'/api/users', {headers: {Authorization: `Bearer ${user.token}`}})
-                const hrss = await axios.get(cfg.ruta+'/api/caballos', {headers: {Authorization: `Bearer ${user.token}`}})
-                const fchs = await axios.get(cfg.ruta+'/api/fichas', {headers: {Authorization: `Bearer ${user.token}`}})
-                const nots = await axios.get(cfg.ruta+'/api/notis', {headers: {Authorization: `Bearer ${user.token}`}})
-                if(usrs.status == 200 && hrss.status == 200 && fchs.status == 200){
-                    let preps = usrs.data.filter( u => u.tipo === 'preparador' )
-                    if(preps.length > 0){
-                        for(let p of preps){
-                            p.vets = usrs.data.filter( u => ( u.tipo === 'veterinario' && u.cod_equipo === p.cod_equipo) )
-                            if(hrss.data.length > 0){
-                                p.horses = hrss.data.filter( h => h.codigo_equipo === p.cod_equipo )
-                            }else{
-                                p.horses = null
-                            }
-                        }
-                        if(fchs.data.length > 0){
-                            for(let p of preps){
-                                if(p.horses){
-                                    for(let h of p.horses){
-                                        h.ficha = fchs.data.filter( f => f.codigo === h.codigo_caballo )
-                                    }
-                                }
-                            }
-                        }
-                        if(nots.data.length > 0){
-                            for(let p of preps){
-                                p.notificaciones = nots.data.filter( n => (n.target === p.cod_equipo || n.target === 'all') )
-                            }
-                        }
-                        for(let a of preps){
-                            if(a.vets.length == 0){
-                                a.vets = null
-                            }
-                            if(a.horses.length == 0){
-                                a.horses = null
-                            }
-                        }
+                const usrs = (await axios.get(cfg.ruta+'/api/users', {headers: {Authorization: `Bearer ${user.token}`}})).data
+                const hrss = (await axios.get(cfg.ruta+'/api/caballos', {headers: {Authorization: `Bearer ${user.token}`}})).data
+                const fchs = (await axios.get(cfg.ruta+'/api/fichas', {headers: {Authorization: `Bearer ${user.token}`}})).data
+                const nots = (await axios.get(cfg.ruta+'/api/notis', {headers: {Authorization: `Bearer ${user.token}`}})).data
+                const eqps = (await axios.get(cfg.ruta+'/api/teams', {headers: {Authorization: `Bearer ${user.token}`}})).data
+                const crls = await (await axios.get(cfg.ruta+'/api/corrales', {headers: {Authorization: `Bearer ${user.token}`}})).data
+                
+                eqps.forEach( e => {
+                    if(e.prep != 'open'){ 
+                        e.prep = usrs.filter( u => u.rut === e.prep )
+                        e.vets = usrs.filter( u => (u.cod_equipo === e.codigo && u.tipo === 'veterinario') )
+                        e.horses = hrss.filter( h => h.codigo_equipo === e.codigo )
+                        if(e.horses[0]) e.horses.forEach( h => h.ficha = fchs.filter( f => f.codigo === h.codigo_caballo ) )
+                        e.notificaciones = nots.filter( n => (  n.target === 'all' || n.target === e.codigo ) )
+                        e.corrales = crls.filter( c => c.equipo === e.codigo )
                     }
-                    return preps
-                }
+                } )
+                let corralesDisponibles = crls.filter( c => c.equipo === 'open' )
+                eqps.push(corralesDisponibles)
+                return eqps
+                
             }else return null
-        },
-        refetchInterval: 600000
+        }
     })
     const navegar = useNavigate()
 
@@ -90,17 +72,26 @@ export default function InterfazAdmin(){
     const verPreparadores = () => {
         setVerNots(false)
         setVerFichas(false)
+        setHome(false)
         setVerPreps(true)
     }
     const verNotificaciones = () => {
         setVerPreps(false)
         setVerFichas(false)
+        setHome(false)
         setVerNots(true)
     }
     const verFichasVeterinarias = () => {
         setVerPreps(false)
         setVerNots(false)
+        setHome(false)
         setVerFichas(true)
+    }
+    const verHome = () => {
+        setVerPreps(false)
+        setVerNots(false)
+        setVerFichas(false)
+        setHome(true)
     }
     const handleLogout = () => {
         logout()
@@ -111,7 +102,7 @@ export default function InterfazAdmin(){
         <Container className="cuerpo p-0" fluid>
             <Container className="barra_nav p-0" fluid>
                 <Navbar variant='success' bg='success' className='navbar'collapseOnSelect expand='sm'>
-                    <Navbar.Brand as='h1' className='navTitle'> <Image src={logo}/> Hipic Vet-Soft</Navbar.Brand>
+                    <Navbar.Brand as='h1' className='navTitle' > <Button variant="outline-light" onClick={verHome}> <Image src={logo}/> <strong> Hipic Vet </strong> </Button>  </Navbar.Brand>
                     <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
                     <Navbar.Collapse id='responsive-navbar-nav' className='responsive-navbar-nav justify-content-*-between'>
                         <Nav className='me-auto'>
@@ -127,6 +118,7 @@ export default function InterfazAdmin(){
             </Container>
             <hr/>
             <Container className="bloque-position">
+                {home ? <AdminHome query={query}/> : null}
                 {verPreps ? <AdminPreps query={query}/> : null}
                 {verNots ? <AdminNots query={query} ntfcns={notis}/> : null}
                 {verFichas ? <AdminFichas query={query}/> : null}

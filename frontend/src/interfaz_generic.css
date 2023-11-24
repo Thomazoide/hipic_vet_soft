@@ -2,11 +2,19 @@ body{
     background-color: #23272e;
 }
 
+
+
 .select-view{
     display: flex;
     flex-direction: row;
     justify-content: center;
     max-width: 360px;
+}
+
+.elemento{
+    border: solid;
+    border-color: blanchedalmond;
+    border-width: 1px;
 }
 
 .spread-data{
@@ -18,6 +26,19 @@ body{
 .nav-logout{
     display: flex;
     float: right;
+}
+
+.corrales-disp{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    max-height: 200px;
+    max-width: 100%;
+    overflow-y: scroll;
+    border: outset;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: grey;
 }
 
 .preps-info{
@@ -153,6 +174,17 @@ body{
     max-width: 360px;
 }
 
+.corrales-inner{
+    padding: 2px;
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 10px;
+}
+
+.corrales-inner::-webkit-scrollbar{
+    display: none;
+}
+
 .enrolador{
     padding: 15px;
     flex-grow: 1;
@@ -188,6 +220,22 @@ body{
     border-radius: 5px;
     overflow-y: auto;
     overflow-x: auto;
+}
+
+::-webkit-scrollbar{
+    max-width: 8px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: rgba(39, 37, 37, 0.4);
+    border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb{
+    width: 8px;
+    opacity: 0.2;
+    border-radius: 15px;
+    background-color: rgba(245, 245, 220, .9) ;
 }
 
 .lista-caballos{

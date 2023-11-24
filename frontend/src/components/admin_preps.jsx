@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, memo} from 'react'
 import { Container, Button, Form, Spinner, ButtonGroup, Toast } from 'react-bootstrap'
 import { useAuthContext } from '../hooks/useAuthContext'
 import cfg from '../cfg.json'
@@ -8,12 +8,18 @@ export default function AdminPreps({query}){
 
     //bloque variables
 
-    const [selectedPrep, setSelectedPrep] = useState({})
+    const [selectedPrep, setSelectedPrep] = useState(null)
+    const [queryData, setQueryData] = useState(null)
+    const [equiposDisp, setEquiposDisp] = useState(null)
+    const [corralesDisponibles, setCorralesDisponibles] = useState(null)
+    const [equipos, setEquipos] = useState(null)
     const [renderizar, setRenderizar] = useState(false)
     const [exito, setExito] = useState(false)
     const [exitoDelete, setExitoDelete] = useState(false)
     const [error, setError] = useState(false)
     const [errorDelete, setErrorDelete] = useState(false)
+    const [disableChecks, setDisableChecks] = useState(false)
+    const [corrales_en_posesion, SetCorrales_en_posesion] = useState(null)
     const tipo = 'preparador'
     const nombre = useRef(null)
     const rut = useRef(null)
@@ -21,7 +27,6 @@ export default function AdminPreps({query}){
     const cell = useRef(null)
     const pass = useRef(null)
     const cod_equipo = useRef(null)
-    const corrales_en_posesion = useRef(null)
     const {user} = useAuthContext()
 
     //bloque variables
@@ -39,64 +44,45 @@ export default function AdminPreps({query}){
     const toggleSuccessDelete = () => setExitoDelete(!exitoDelete)
     const toggleErrorDelete = () => setErrorDelete(!errorDelete)
 
+    const handleCorralesCheck = (e) => {
+        console.log(e)
+        if(!corrales_en_posesion && e.target.checked){
+            let plantilla = {
+                selected: [e.target.value]
+            }
+            SetCorrales_en_posesion(plantilla)
+            console.log(plantilla)
+        }
+        if(corrales_en_posesion){
+            let plantilla = corrales_en_posesion
+            if(plantilla.selected.length < 3){
+                if(e.target.checked && !plantilla.selected.filter( c => c === e.target.value )[0] ){
+                    if(plantilla.selected.length < 3) setDisableChecks(false)
+                    if(plantilla.selected.length >= 3) setDisableChecks(true)
+                    plantilla.selected.push(e.target.value)
+                    console.log(plantilla)
+                    SetCorrales_en_posesion(plantilla)
+                }else if( !e.target.checked && plantilla.selected.filter( c => c === e.target.value )[0] ){
+                    plantilla.cantidad -= 1
+                    plantilla.selected.filter( c => c !== e.target.value )
+                    console.log(plantilla)
+                    SetCorrales_en_posesion(plantilla)
+                }
+            }
+        }
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const aux = {
-            tipo: tipo,
-            nombre: nombre.current.value,
-            rut: rut.current.value,
-            email: email.current.value,
-            cell: cell.current.value,
-            pass: pass.current.value,
-            cod_equipo: cod_equipo.current.value,
-        }
-        try{
-            let cep = corrales_en_posesion.current.value
-            cep = cep.split(',')
-            cep.forEach( x => x.trim() )
-            aux.corrales_en_posesion = cep
-        }catch(err){
-            aux.corrales_en_posesion = [corrales_en_posesion.current.value]
-        }
-        try{
-            await axios.post(cfg.ruta+'/api/users', aux, {headers: {Authorization: `Bearer ${user.token}`}}).then( res => {
-                if(res.status == 200){
-                    setExito(true)
-                    query.refetch()
-                }
-            } )
-        }catch(err){
-            console.log(err)
-            setError(true)
-        }
+        
     }
 
     const handleDelete = async () => {
-        try{
-            await axios.delete(cfg.ruta+'/api/users', {
-                headers: {
-                    Authorization: `Bearer ${user.token}`
-                },
-                data: selectedPrep
-            }).then( res => {
-                if(res.status == 200){
-                    setExitoDelete(true)
-                    query.refetch()
-                }
-            } )
-        }catch(err){
-            console.log(err)
-            setErrorDelete(true)
-        }
+        
     }
 
     const handleChangePrep = (event) => {
-        let trgtRut = event.target.value
-        for(let p of query.data){
-            if(p.rut === trgtRut){
-                setSelectedPrep(p)
-            }
-        }
+        
     }
 
     //bloque funciones
@@ -104,9 +90,22 @@ export default function AdminPreps({query}){
     //bloque efectos
 
     useEffect( () => {
-        if(Array.isArray(query.data)){
-            setSelectedPrep(query.data[0])
-            setRenderizar(true)
+        if(query){
+            if(query.isFetched){
+                console.log(query.data[60])
+                setQueryData(query.data)
+                let arr = query.data.filter( e => e.prep != 'open' )
+                let ed = query.data.filter( e => e.prep === 'open' )
+                setCorralesDisponibles(query.data[60])
+                if(ed[0]){
+                    setEquiposDisp(ed)
+                }
+                if(arr[0]){
+                    setSelectedPrep(arr[0])
+                    setEquipos(arr)
+                    setRenderizar(true)
+                }
+            }
         }
     }, [query] )
 
@@ -174,7 +173,9 @@ export default function AdminPreps({query}){
         )
     }
 
-    const PrepForm = () => {
+    
+
+    const PrepForm = memo(() => {
         return(
             <Container className='lista-crear-preps'>
                 <h1>Crear preparadores</h1>
@@ -227,7 +228,7 @@ export default function AdminPreps({query}){
                         </Form.Label>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label for='cell'>
+                        <Form.Label>
                             celular
                             <Container className='cellInput'>
                                 <p className='prefix'>+56</p>
@@ -255,27 +256,31 @@ export default function AdminPreps({query}){
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
-                            Código de equipo
-                            <Form.Control
+                            Equipo
+                            <Form.Select
                             id='cod'
                             required
                             size='sm'
-                            type='text'
-                            placeholder='...'
-                            ref={cod_equipo}/>
+                            ref={cod_equipo}>
+                                { equiposDisp.map( e => <option key={e.codigo} value={e.codigo} > {e.codigo} </option> ) }
+                            </Form.Select>
                         </Form.Label>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>
-                            Corrales en posesión    
-                            <Form.Control
-                            id='crr'
-                            required
-                            size='sm'
-                            type='text'
-                            placeholder='corral1, corral2, ... , corralN'
-                            ref={corrales_en_posesion}/>
-                        </Form.Label>
+                        <p>Corrales en posesión</p>
+                        <Container className='corrales-disp'>
+                            {
+                                corralesDisponibles.map( (c, i) => (
+                                    <div className='corrales-inner' key={`crr${i}`}>
+                                        <Form.Switch
+                                        id={`c${i+1}`}
+                                        value={c.cod_corral}
+                                        label={c.cod_corral}
+                                        onChange={handleCorralesCheck} />
+                                    </div>
+                                ) )
+                            }
+                        </Container>
                     </Form.Group>
                     <Form.Group className='btn-crear-prep' >
                         <Container>
@@ -291,72 +296,12 @@ export default function AdminPreps({query}){
                 }
             </Container>
         )
-    }
+    })
 
     const PrepData = () => {
         return(
             <Container className='ficha-info'>
-                <Container className='p-0 vert-btns' fluid>
-                    <ButtonGroup vertical size='sm' className='p-0'>
-                        {
-                            query.data.map( prep => (
-                                <Button variant='success' key={prep.rut} value={prep.rut} onClick={handleChangePrep} >{prep.nombre}</Button>
-                            ) )
-                        }
-                    </ButtonGroup>
-                </Container>
-                <Container className='lista-preps'>
-                    { exitoDelete ? <SuccessDeleteToast/> : null }
-                    { errorDelete ? <ErrorDeleteToast/> : null }
-                    <h1>{selectedPrep.nombre}</h1>
-                    <p> Rut: {selectedPrep.rut} </p>
-                    <p> Email: {selectedPrep.email} </p>
-                    <p> Celular: {selectedPrep.cell} </p>
-                    <p> Codigo de equipo: {selectedPrep.cod_equipo} </p>
-                    <p> Corrales en posesión: 
-                        {
-                            selectedPrep.corrales_en_posesion.map( (c, i) => ( <i> {c}{ (i+1 == selectedPrep.corrales_en_posesion.length) ? null :  ','}  </i> ) )
-                        } 
-                    </p>
-                    <hr/>
-                    <Button variant='danger' onClick={handleDelete}>Eliminar preparador</Button>
-                    <hr/>
-                    <h2>Veterinarios</h2>
-                    {
-                        (selectedPrep.vets) ? selectedPrep.vets.map( vet => (
-                            <Container key={vet.rut}>
-                                <p className='minititle' > {vet.nombre} </p>
-                                <p> Rut: {vet.rut} </p>
-                                <hr/>
-                            </Container>
-                        ) ) : <Container>
-                            { (selectedPrep.vets == null) ?
-                                <p className='text-danger' > El preparador no posee veterinarios agregados al sistema... </p> : null
-                            }
-                            <hr/>
-                        </Container>
-                    }
-                    <h3>Caballos</h3>
-                    {
-                        (selectedPrep.horses) ? selectedPrep.horses.map( horse => (
-                            <div key={horse.codigo_caballo}>
-                                <p className='minititle' > {horse.nombre} </p>
-                                <p> Propietario: {horse.propietario} </p>
-                                <p> Corral: {horse.codigo_corral} </p>
-                                {
-                                    (horse.ficha[0]) ? <p className='text-success'> 
-                                    El caballo tiene una ficha creada </p> : <p className='text-danger'> 
-                                    El caballo no tiene una ficha creada </p>
-                                }
-                                <hr/>
-                            </div>
-                        ) ) : <Container>
-                            { (selectedPrep.horses == null) ?
-                                <p className='text-danger'> El preparador no posee caballos agragados al sistema... </p> : null
-                            }
-                        </Container>
-                    }
-                </Container>
+                
             </Container>
         )
     }
@@ -381,10 +326,10 @@ export default function AdminPreps({query}){
                 <Container className='justify-content-center' >
                     <Spinner variant='success' size='lg'/>
                 </Container> : null }
-                { renderizar ? <PrepData/> : null }
+                
             </div>
             <div className='enrolador'>
-                <PrepForm/>
+                { equiposDisp && queryData && corralesDisponibles ? <PrepForm/> : null}
             </div>
         </div>
     )
