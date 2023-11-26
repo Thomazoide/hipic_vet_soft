@@ -27,11 +27,12 @@ export default function AdminNots({query, ntfcns}){
     useEffect( () => {
         if(Array.isArray(query.data)){
             if(Array.isArray(ntfcns.data)){
-                let arr = []
-                for(let p of query.data){
-                    arr.push(p.cod_equipo)
-                }
-                setEquipos(arr)
+                let arr = query.data.filter( e => e.prep !== 'open' )
+                let arr2 = []
+                arr.forEach( a => {
+                    arr2.push(a.codigo)
+                } )
+                setEquipos(arr2)
                 setFilteredNots(ntfcns.data)
                 setRenderizar(true)
             }else{

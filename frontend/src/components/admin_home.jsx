@@ -33,10 +33,13 @@ export default function AdminHome({query}){
                                             <p> Estado: <strong className='text-success'> Disponible </strong> </p>
                                         </> : <>
                                             <p> Código: {e.codigo} </p>
-                                            <p> Preparador: <strong className='text-dark'> {e.prep.nombre} </strong> </p>
+                                            <p> Preparador: <strong> {e.prep[0].nombre} </strong> </p>
+                                            <hr/>
                                             <p> Corrales: { e.corrales.map( c => <strong key={c.cod_corral} > {c.cod_corral}, </strong> )  } </p>
-                                            <p> {e.vets.length} veterinarios </p>
-                                            <p> {e.horses.length} caballos </p>
+                                            <hr/>
+                                            <p> Veterinarios: {e.vets.length} </p>
+                                            <hr/>
+                                            <p> Caballos: {e.horses.length} </p>
                                         </> }
                                     </Col> : null }
                                 </>

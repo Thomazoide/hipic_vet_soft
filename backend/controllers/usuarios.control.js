@@ -1,4 +1,6 @@
 const Usuarios = require('./../models/usuarios')
+const Corrales = require('./../models/corrales')
+const Equipos = require('./../models/equipos')
 
 const userCtrl = {}
 
@@ -17,7 +19,16 @@ userCtrl.setUser = async (req, res) => {
         console.log(cod_equipo)
         const newUser = await Usuarios.signup(tipo, nombre, rut, email, cell, pass, cod_equipo, corrales_en_posesion)
         console.log('Object::: ', corrales_en_posesion)
-        
+        const team = await Equipos.findOne({codigo: cod_equipo})
+        team.prep = rut
+        await Equipos.updateOne({_id: team._id}, team)
+        const crls = await Corrales.find()
+        let modData = []
+        corrales_en_posesion.forEach( sc => {
+            modData.push(crls.filter( c => c.cod_corral === sc )[0])
+        } )
+        const newcrrs= modData.map(c => c.cod_corral )
+        await Corrales.updateMany( {cod_corral: {$in: newcrrs}}, {equipo: cod_equipo} )
         res.status(200).json({rut, newUser})
     }catch(err){
         res.status(400).json(err.message)

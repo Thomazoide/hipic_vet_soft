@@ -44,7 +44,7 @@ export default function AdminFichas({query}){
             <Container>
                 <Dropdown onSelect={handleSelect}>
                     <Dropdown.Toggle variant='success'>
-                        Equipo: {selectedTeam.cod_equipo}
+                        Equipo: {selectedTeam.codigo}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         {

@@ -63,17 +63,41 @@ export default function AdminPreps({query}){
                     console.log(plantilla)
                     SetCorrales_en_posesion(plantilla)
                 }else if( !e.target.checked && plantilla.selected.filter( c => c === e.target.value )[0] ){
-                    plantilla.cantidad -= 1
-                    plantilla.selected.filter( c => c !== e.target.value )
+                    plantilla.selected = plantilla.selected.filter( c => c !== e.target.value )
+                    if(plantilla.selected.length < 3) setDisableChecks(false)
                     console.log(plantilla)
                     SetCorrales_en_posesion(plantilla)
                 }
+            }else if( !e.target.checked && plantilla.selected.filter( c => c === e.target.value )[0] ){
+                plantilla.selected = plantilla.selected.filter( c => c !== e.target.value )
+                if(plantilla.selected.length < 3) setDisableChecks(false)
+                console.log(plantilla)
+                SetCorrales_en_posesion(plantilla)
             }
         }
     }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+        const plantilla= {
+            nombre: nombre.current.value,
+            tipo: tipo,
+            rut: rut.current.value,
+            email: email.current.value,
+            cell: cell.current.value,
+            pass: pass.current.value,
+            cod_equipo: cod_equipo.current.value,
+            corrales_en_posesion: corrales_en_posesion.selected
+        }
+        try{
+            await axios.post('http://localhost:4444/api/users', plantilla, {headers: {Authorization: `Bearer ${user.token}`}})
+            setExito(true)
+            query.refetch()
+        }catch(err){
+            setError(true)
+            query.refetch()
+        }
+        console.log(plantilla)
         
     }
 
@@ -94,13 +118,14 @@ export default function AdminPreps({query}){
             if(query.isFetched){
                 console.log(query.data[60])
                 setQueryData(query.data)
-                let arr = query.data.filter( e => e.prep != 'open' )
+                let arr = query.data.filter( e => (e.prep != 'open' && !Array.isArray(e) ) )
                 let ed = query.data.filter( e => e.prep === 'open' )
                 setCorralesDisponibles(query.data[60])
                 if(ed[0]){
                     setEquiposDisp(ed)
                 }
                 if(arr[0]){
+                    console.log(arr)
                     setSelectedPrep(arr[0])
                     setEquipos(arr)
                     setRenderizar(true)
@@ -121,37 +146,7 @@ export default function AdminPreps({query}){
                         <strong>Éxito en la operación</strong>
                     </Toast.Header>
                     <Toast.Body className='text-white' >
-                        Preparador guardado con éxito...
-                    </Toast.Body>
-                </Toast>
-            </Container>
-        )
-    }
-
-    const SuccessDeleteToast = () => {
-        return(
-            <Container>
-                <Toast show={exitoDelete} onClose={toggleSuccessDelete} bg='success'>
-                    <Toast.Header>
-                        <strong>Operacion completada</strong>
-                    </Toast.Header>
-                    <Toast.Body className='text-white'>
-                        Preparador eliminado con exito...
-                    </Toast.Body>
-                </Toast>
-            </Container>
-        )
-    }
-
-    const ErrorDeleteToast = () => {
-        return(
-            <Container>
-                <Toast show={errorDelete} onClose={toggleErrorDelete} bg='success'>
-                    <Toast.Header>
-                        <strong>Error!</strong>
-                    </Toast.Header>
-                    <Toast.Body className='text-white'>
-                        Error al eliminar preparador...
+                        Operación realizada con éxito...
                     </Toast.Body>
                 </Toast>
             </Container>
@@ -166,7 +161,7 @@ export default function AdminPreps({query}){
                         <strong>Error</strong>
                     </Toast.Header>
                     <Toast.Body className='text-white'>
-                        Error al guardar usuario...
+                        Error en la operación...
                     </Toast.Body>
                 </Toast>
             </Container>
@@ -288,21 +283,67 @@ export default function AdminPreps({query}){
                         </Container>
                     </Form.Group>
                 </Form>
-                {
-                    exito ? <SuccessToast/> : null
-                }
-                {
-                    error ? <ErrorToast/> : null
-                }
+                
             </Container>
         )
     })
 
     const PrepData = () => {
         return(
-            <Container className='ficha-info'>
-                
-            </Container>
+            <div className='ficha-info'>
+                {
+                    selectedPrep && equipos ? <>
+                        <div className='vert-btns'>
+                            <ButtonGroup vertical>
+                                {
+                                    equipos.map( e => <Button variant='outline-success'>
+                                        {e.codigo}
+                                    </Button> )
+                                }
+                            </ButtonGroup>
+                        </div>
+                        <div className='lista-preps'>
+                            <h1> {selectedPrep.prep[0].nombre} </h1>
+                            <p> Rut: {selectedPrep.prep[0].rut} </p>
+                            <p> Email: {selectedPrep.prep[0].email} </p>
+                            <p> Celular: {selectedPrep.prep[0].cell} </p>
+                            <p> Corrales: { selectedPrep.corrales.map( (c, i) => <strong> {c.cod_corral}{ i<selectedPrep.corrales.length-1 ? (',') : null }  </strong> ) } </p>
+                            <hr/>
+                            <Button variant='outline-danger'>Eliminar equipo</Button>
+                            <hr/>
+                            <p className='minititle'>Veterinarios</p>
+                            {
+                                !selectedPrep.vets[0] ? <p className='text-warning'>Sin veterinarios registrados</p> : <>
+                                    {
+                                        selectedPrep.vets.map( vet => <>
+                                            <p className='minititle' > {vet.nombre} </p>
+                                            <p> Rut: {vet.rut} </p>
+                                            <p> Email: {vet.email} </p>
+                                            <p> Celular: {vet.cell} </p>
+                                            <hr/>
+                                        </> )
+                                    }
+                                </>
+                            }
+                            <hr/>
+                            <p className='minititle'>Caballos</p>
+                            {
+                                !selectedPrep.horses[0] ? <p className='text-warning'>Sin caballos registrados</p> : <>
+                                    {
+                                        selectedPrep.horses.map( h => <>
+                                            <p className='minititle'> {h.nombre} </p>
+                                            <p> Propietario: {h.propietario} </p>
+                                            <p> Código: {h.codigo_caballo} </p>
+                                            <p> Corral: {h.codigo_corral} </p>
+                                            <p> Ficha médica: { h.ficha[0] ? <strong className='text-success'> Si </strong> : <strong className='text-danger'> No </strong> } </p>
+                                        </> )
+                                    }
+                                </>
+                            }
+                        </div>
+                    </> : null
+                }
+            </div>
         )
     }
 
@@ -313,20 +354,25 @@ export default function AdminPreps({query}){
     if(query.isError){
         return(
             <Container className='lista-caballos'>
-                <h1>Error al cargar datos...<br/>Se recomiendo iniciar sesión nuevamente...</h1>
+                <h1>Error al cargar datos...<br/>Se recomienda iniciar sesión nuevamente...</h1>
             </Container>
         )
     }
     
     return(
         <div className='preps-info'>
-            
+            {
+                exito ? <SuccessToast/> : null
+            }
+            {
+                error ? <ErrorToast/> : null
+            }
             <div className='enrolador'>
                 { (query.isLoading || query.isFetching) ? 
                 <Container className='justify-content-center' >
                     <Spinner variant='success' size='lg'/>
                 </Container> : null }
-                
+                { renderizar ? <PrepData/> : null }
             </div>
             <div className='enrolador'>
                 { equiposDisp && queryData && corralesDisponibles ? <PrepForm/> : null}
