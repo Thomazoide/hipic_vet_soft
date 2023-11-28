@@ -46,17 +46,17 @@ export default function AdminFichas({query}){
                     <Dropdown.Toggle variant='success'>
                         Equipo: {selectedTeam.codigo}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu>
+                    <Dropdown.Menu className='team-dropdown' >
                         {
                             query.data.map( p => (
-                                <Dropdown.Item eventKey={p.cod_equipo} key={p.cod_equipo}>
-                                    {p.cod_equipo}
+                                <Dropdown.Item eventKey={p.codigo} key={p.codigo}>
+                                    {p.codigo}
                                 </Dropdown.Item>
                             ) )
                         }
                     </Dropdown.Menu>
                 </Dropdown>
-                { selectedTeam.horses ?
+                { selectedTeam.horses[0] ?
                     <Container className='lista-caballos'>
                         <h3>Caballos con ficha</h3>
                         <Container className='ficha-info'>
@@ -69,6 +69,7 @@ export default function AdminFichas({query}){
                                                 <p>Codigo: {h.codigo_caballo}</p>
                                                 <p>Peso: {h.ficha[0].peso['$numberDecimal']}</p>
                                                 <p>Habilitado:  { h.ficha[0].habilitado ? <strong className='text-success'>SI</strong> : <strong className='text-danger'>NO</strong> } </p>
+                                                <button className='btn-info' > <strong className='text-dark'>?</strong> </button>
                                             </Container>
                                         )
                                     }

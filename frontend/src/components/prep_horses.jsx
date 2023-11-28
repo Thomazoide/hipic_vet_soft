@@ -15,7 +15,6 @@ export default function PrepHorses({query}){
     const {user} = useAuthContext()
     const nombre = useRef(null)
     const propietario = useRef(null)
-    const hcode = useRef(null)
     const crr = useRef(null)
 
     //bloque variables
@@ -23,9 +22,12 @@ export default function PrepHorses({query}){
 
     useEffect( () => {
         if(query.data){
+            console.log(query.data)
             if(query.data.horses[0]){
                 setSelectedHorse(query.data.horses[0])
                 setRender(true)
+            }else{
+                setRender(false)
             }
         }
         if(user){
@@ -53,20 +55,17 @@ export default function PrepHorses({query}){
         const aux = {
             nombre: nombre.current.value,
             propietario: propietario.current.value,
-            codigo_caballo: hcode.current.value,
             codigo_equipo: equipo,
             codigo_corral: crr.current.value
         }
         try{
-            await axios.post(cfg.ruta+'/api/caballos', aux, {headers: {Authorization: `Bearer ${user.token}`}}).then( res => {
-                if(res.status == 200){
-                    setExito(true)
-                    query.refetch()
-                }
-            })
+            await axios.post(cfg.ruta+'/api/caballos', aux, {headers: {Authorization: `Bearer ${user.token}`}})
+            setExito(true)
+            query.refetch()
         }catch(err){
             console.log(err)
             setError(true)
+            query.refetch()
         }
     }
 
@@ -77,15 +76,13 @@ export default function PrepHorses({query}){
                     Authorization: `Bearer ${user.token}`
                 },
                 data: selectedHorse
-            }).then( res => {
-                if(res.status == 200){
-                    setExito(true)
-                    query.refetch()
-                }
-            } )
+            })
+            setExito(true)
+            query.refetch()
         }catch(err){
             console.log(err)
             setError(true)
+            query.refetch()
         }
     }
 
@@ -201,17 +198,6 @@ export default function PrepHorses({query}){
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>
-                            Codigo de caballo
-                            <Form.Control
-                            id='codigo-c'
-                            required
-                            type='text'
-                            size='sm'
-                            ref={hcode}/>
-                        </Form.Label>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>
                             Codigo de equipo
                             <Form.Control
                             id='codigo-e'
@@ -226,7 +212,7 @@ export default function PrepHorses({query}){
                             <Form.Select id='crr' ref={crr}>
                                 {
                                     query.data.corrales.map( c => (
-                                        <option key={c} value={c}> {c} </option>
+                                        <option disabled={ c.cant_caballos < c.capacidad ? (false) : (true) } key={c.cod_corral} value={c.cod_corral}> {c.cod_corral} </option>
                                     ) )
                                 }
                             </Form.Select>

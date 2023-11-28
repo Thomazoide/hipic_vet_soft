@@ -2,7 +2,14 @@ body{
     background-color: #23272e;
 }
 
+.team-dropdown{
+    max-height: 40vh;
+    overflow-y: scroll;
+}
 
+.btn-info{
+    border-radius: 50%;
+}
 
 .select-view{
     display: flex;
@@ -15,6 +22,13 @@ body{
     border: solid;
     border-color: blanchedalmond;
     border-width: 1px;
+}
+
+.corral{
+    border: solid;
+    border-color: blanchedalmond;
+    border-width: 1px;
+    margin: 10px;
 }
 
 .spread-data{
@@ -153,6 +167,13 @@ body{
 }
 
 .botones-admin{
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.prepDash{
     display: flex;
     align-content: space-around;
     flex-wrap: wrap;
