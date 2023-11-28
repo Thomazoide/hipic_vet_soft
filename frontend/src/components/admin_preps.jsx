@@ -325,7 +325,6 @@ export default function AdminPreps({query}){
                                     }
                                 </>
                             }
-                            <hr/>
                             <p className='minititle'>Caballos</p>
                             {
                                 !selectedPrep.horses[0] ? <p className='text-warning'>Sin caballos registrados</p> : <>
@@ -336,6 +335,7 @@ export default function AdminPreps({query}){
                                             <p> Código: {h.codigo_caballo} </p>
                                             <p> Corral: {h.codigo_corral} </p>
                                             <p> Ficha médica: { h.ficha[0] ? <strong className='text-success'> Si </strong> : <strong className='text-danger'> No </strong> } </p>
+                                            <hr/>
                                         </> )
                                     }
                                 </>

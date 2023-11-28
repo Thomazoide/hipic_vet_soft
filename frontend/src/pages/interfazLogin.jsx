@@ -36,7 +36,7 @@ export default function InterfazLogin(){
         <Container fluid className="cuerpo p-0">
             <Container fluid className="barra-nav p-0">
                 <Navbar variant="success" bg="success">
-                    <Navbar.Brand className="navTitle" as='h1'> <Image src={logo}/> Hipic Vet-Soft </Navbar.Brand>
+                    <Navbar.Brand className="navTitle" as='h1'> <Image src={logo}/> Hipic Vet </Navbar.Brand>
                 </Navbar>
             </Container>
             <hr/>

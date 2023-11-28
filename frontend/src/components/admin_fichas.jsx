@@ -5,26 +5,54 @@ export default function AdminFichas({query}){
     //bloque variables
 
     const [selectedTeam, setSelectedTeam] = useState({})
+    const [equipos, setEquipos] = useState(null)
     const [renderizar, setRenderizar] = useState(false)
     const [noTeams, setNoTeams] = useState(false)
+    const [verRazon, setVerRazon] = useState(null)
 
     //bloque variables
     //bloque efectos
 
     useEffect( () => {
-        if(Array.isArray(query.data)){
-            if(query.data.length > 0){
+        if(query.data){
+            const qd = query.data.filter( t => ( t.prep !== 'open' && !Array.isArray(t) ) )
+            if(Array.isArray(qd)){
+                for(let t of qd){
+                    if(t.horses[0]){
+                        for(let h of t.horses){
+                            const arr = []
+                            if(h.ficha[0]){
+                                for(let e of h.ficha[0].examenes) arr.push(e)
+                                for(let e of h.ficha[0].vacunaciones) arr.push(e)
+                                for(let e of h.ficha[0].operaciones) arr.push(e)
+                            }
+                            if(arr[0]){
+                                h.razon = arr.reduce( (maxFechaObjeto, objeto) => {
+                                    const fechaObjeto = new Date( objeto.cod.split('_')[1] )
+                                    const fechaMax = new Date( maxFechaObjeto.cod.split('_')[1] )
+                                    return fechaObjeto > fechaMax ? objeto : maxFechaObjeto
+                                }, arr[0] )
+                            }
+                        }
+                    }
+                }
+                console.log(qd)
+                setEquipos(qd)
+                setNoTeams(false)
                 setRenderizar(true)
-                setSelectedTeam(query.data[0])
-            }else{
-                setNoTeams(true)
-                setRenderizar(false)
+                setSelectedTeam(qd[0])
             }
+        }else{
+            setNoTeams(true)
+            setRenderizar(false)
         }
+        
     }, [query] )
 
     //bloque efectos
     //bloque funciones
+
+    const toggleVerRazon = (e) => {}
 
     const handleSelect = (e) => {
         let auxSel
@@ -42,20 +70,20 @@ export default function AdminFichas({query}){
     const TeamsData = () => {
         return(
             <Container>
-                <Dropdown onSelect={handleSelect}>
+                {equipos ? <Dropdown onSelect={handleSelect}>
                     <Dropdown.Toggle variant='success'>
                         Equipo: {selectedTeam.codigo}
                     </Dropdown.Toggle>
                     <Dropdown.Menu className='team-dropdown' >
                         {
-                            query.data.map( p => (
+                            equipos.map( p => (
                                 <Dropdown.Item eventKey={p.codigo} key={p.codigo}>
                                     {p.codigo}
                                 </Dropdown.Item>
                             ) )
                         }
                     </Dropdown.Menu>
-                </Dropdown>
+                </Dropdown>: <Spinner variant='success' size='sm'/> }
                 { selectedTeam.horses[0] ?
                     <Container className='lista-caballos'>
                         <h3>Caballos con ficha</h3>
@@ -108,14 +136,6 @@ export default function AdminFichas({query}){
         return(
             <Container className='lista-caballos'>
                 <h1>Error al obtener datos<br/>Se recomienda iniciar sesion nuevamente...</h1>
-            </Container>
-        )
-    }
-
-    if(query.data.length < 1){
-        return(
-            <Container className='lista-caballos'>
-                <h1>No hay fichas creadas en ningun equipo</h1>
             </Container>
         )
     }

@@ -68,7 +68,7 @@ export default function AdminNots({query, ntfcns}){
         else if(event === 'all'){
             setFiltro(event)
             aux = ntfcns.data.filter( n => n.target === 'all' )
-            if(aux.length > 0){
+            if(aux[0]){
                 setFilteredNots(aux)
             }else{
                 aux.push(indc)
@@ -77,7 +77,7 @@ export default function AdminNots({query, ntfcns}){
         }else{
             setFiltro(event)
             aux = ntfcns.data.filter( n => n.target === event )
-            if(aux.length > 0){
+            if(aux[0]){
                 setFilteredNots(aux)
             }else{
                 aux.push(indc)
