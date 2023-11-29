@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { Container, Dropdown, Spinner } from 'react-bootstrap'
+import { Container, Dropdown, Spinner, CloseButton } from 'react-bootstrap'
 
 export default function AdminFichas({query}){
     //bloque variables
@@ -8,7 +8,7 @@ export default function AdminFichas({query}){
     const [equipos, setEquipos] = useState(null)
     const [renderizar, setRenderizar] = useState(false)
     const [noTeams, setNoTeams] = useState(false)
-    const [verRazon, setVerRazon] = useState(null)
+    const [razon, setRazon] = useState(null)
 
     //bloque variables
     //bloque efectos
@@ -16,15 +16,24 @@ export default function AdminFichas({query}){
     useEffect( () => {
         if(query.data){
             const qd = query.data.filter( t => ( t.prep !== 'open' && !Array.isArray(t) ) )
-            if(Array.isArray(qd)){
+            if(qd[0]){
                 for(let t of qd){
                     if(t.horses[0]){
                         for(let h of t.horses){
                             const arr = []
                             if(h.ficha[0]){
-                                for(let e of h.ficha[0].examenes) arr.push(e)
-                                for(let e of h.ficha[0].vacunaciones) arr.push(e)
-                                for(let e of h.ficha[0].operaciones) arr.push(e)
+                                for(let e of h.ficha[0].examenes){
+                                    e.cal = 'Exámen'
+                                    arr.push(e)
+                                }
+                                for(let e of h.ficha[0].vacunaciones){ 
+                                    e.cal = 'Vacunación'
+                                    arr.push(e)
+                                }
+                                for(let e of h.ficha[0].operaciones){ 
+                                    e.cal = 'Cirugía'
+                                    arr.push(e)
+                                }
                             }
                             if(arr[0]){
                                 h.razon = arr.reduce( (maxFechaObjeto, objeto) => {
@@ -32,11 +41,18 @@ export default function AdminFichas({query}){
                                     const fechaMax = new Date( maxFechaObjeto.cod.split('_')[1] )
                                     return fechaObjeto > fechaMax ? objeto : maxFechaObjeto
                                 }, arr[0] )
+                                h.razon.cod_hs = h.codigo_caballo
+                            }else{
+                                h.razon = {
+                                    cal: 'NE',
+                                    tipo: 'Sin exámenes realizados',
+                                    descripcion: 'Se recomienda notificar al equipo al respecto...',
+                                    cod_hs: h.codigo_caballo
+                                }
                             }
                         }
                     }
                 }
-                console.log(qd)
                 setEquipos(qd)
                 setNoTeams(false)
                 setRenderizar(true)
@@ -52,7 +68,12 @@ export default function AdminFichas({query}){
     //bloque efectos
     //bloque funciones
 
-    const toggleVerRazon = (e) => {}
+    const cerrarRazon = () => setRazon(null)
+
+    const toggleVerRazon = (e) => {
+        const rea = JSON.parse(e.target.value)
+        setRazon(rea)
+    }
 
     const handleSelect = (e) => {
         let auxSel
@@ -97,7 +118,33 @@ export default function AdminFichas({query}){
                                                 <p>Codigo: {h.codigo_caballo}</p>
                                                 <p>Peso: {h.ficha[0].peso['$numberDecimal']}</p>
                                                 <p>Habilitado:  { h.ficha[0].habilitado ? <strong className='text-success'>SI</strong> : <strong className='text-danger'>NO</strong> } </p>
-                                                <button className='btn-info' > <strong className='text-dark'>?</strong> </button>
+                                                <button className={`btn-info ${!razon ? '' : 'desactivado'}`} disabled={ (!razon && h.razon) ? (false) : (true) } value={ h.razon ? JSON.stringify(h.razon) : null} onClick={ h.razon ? toggleVerRazon : null}> ? </button>
+                                                {
+                                                    (razon && razon.cal !== 'NE' && razon.cod_hs === h.codigo_caballo ) ? <div className='bloque-razon' >
+                                                        <Container className='bloque-razon-header'>
+                                                            <p> <small className='text-warning' > El siguiente exámen justifica el estado del caballo: </small> </p>
+                                                            <div className='btn-cerrar-razon'>
+                                                                <CloseButton onClick={cerrarRazon} variant='white' />
+                                                            </div>
+                                                        </Container>
+                                                        <div className='bloque-razon-content'>
+                                                            <p> <small className='text-secondary' > Tipo: {razon.cal} </small> </p>
+                                                            <p> <small className='text-secondary' > Título: {razon.tipo} </small> </p>
+                                                            <p> <small className='text-secondary' > Descripción: {razon.descripcion} </small> </p>
+                                                            <p> <small className='text-secondary' > Fecha: {razon.fecha} </small> </p>
+                                                        </div>
+                                                    </div> : (razon && razon.cal === 'NE' && razon.cod_hs === h.codigo_caballo) ? <div className='bloque-razon'>
+                                                        <Container className='bloque-razon-header'>
+                                                            <p> <small className='text-danger'> {razon.tipo} </small> </p>
+                                                            <div className='btn-cerrar-razon'>
+                                                                <CloseButton onClick={cerrarRazon} variant='white' />
+                                                            </div>
+                                                        </Container>
+                                                        <div className='bloque-razon-content'>
+                                                            <p> <small className='text-warning'> {razon.descripcion} </small> </p>
+                                                        </div>
+                                                    </div> : null
+                                                }
                                             </Container>
                                         )
                                     }

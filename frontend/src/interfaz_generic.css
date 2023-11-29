@@ -8,7 +8,31 @@ body{
 }
 
 .btn-info{
-    border-radius: 40%;
+    max-height: 30px;
+    max-width: 30px;
+    border-radius: 50%;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s, scale 0.3s;
+}
+
+.btn-info:hover{
+    scale: 110%;
+    border-color: white;
+    background-color: black;
+    color: white;
+}
+
+.btn-info.desactivado{
+    opacity: 0.6;
+    pointer-events: none;
+    border-color: black;
+    background-color: white;
+    color: black;
+}
+
+.btn-info.desactivado:hover{
+    border-color: black;
+    background-color: white;
+    color: black;
 }
 
 .select-view{
@@ -33,11 +57,73 @@ body{
     border-width: 1px;
 }
 
+.bloque-razon{
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    border: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: gray;
+    max-height: 200px;
+    max-width: 300px;
+}
+
+.razon-title{
+    border-right: solid;
+    border-right-width: 1px;
+    border-right-color: gray;
+}
+
+.bloque-razon-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-style: ridge;
+    border-width: 3px;
+    border-color: gray;
+    border-radius: 5px;
+}
+
+.btn-cerrar-razon{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-style:outset;
+    border-color: white;
+    border-width: 1px;
+    border-radius: 15px;
+    transition: scale 0.3s, border-width 0.3s;
+}
+
+.btn-cerrar-razon:hover{
+    scale: 110%;
+    padding: 5px;
+    border-style: outset;
+    border-width: 3px;
+}
+
+.bloque-razon-content{
+    padding: 5px;
+    max-height: 100px;
+    overflow-y: scroll;
+}
+
+.bloque-razon-change{
+    padding: 5px;
+    max-height: 200px;
+}
+
 .corral{
     border: solid;
     border-color: blanchedalmond;
     border-width: 1px;
     margin: 10px;
+}
+
+.corral-content{
+    text-align: left;
 }
 
 .spread-data{

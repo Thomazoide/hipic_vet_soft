@@ -104,11 +104,17 @@ export default function InterfazAdmin(){
                 <Navbar variant='success' bg='success' className='navbar'collapseOnSelect expand='sm'>
                     <Navbar.Brand as='h1' className='navTitle' > <Button variant="outline-light" onClick={verHome}> <Image src={logo}/> <strong> Hipic Vet </strong> </Button>  </Navbar.Brand>
                     <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
-                    <Navbar.Collapse id='responsive-navbar-nav' className='responsive-navbar-nav justify-content-*-between'>
-                        <Nav className='me-auto'>
-                            <Nav.Link href='#' onClick={verPreparadores} >Gestionar preparadores</Nav.Link>
-                            <Nav.Link href='#' onClick={verNotificaciones} >Gestionar notificaciones</Nav.Link>
-                            <Nav.Link href='#' onClick={verFichasVeterinarias} >Ver caballos habilitados</Nav.Link>
+                    <Navbar.Collapse id='responsive-navbar-nav' className='responsive-navbar-nav justify-content-*-around'>
+                        <Nav fill variant="tabs" className='me-auto' >
+                            <Nav.Item >
+                                <Nav.Link href='#' eventKey='verPreps' onClick={verPreparadores} >Gestionar preparadores</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href='#' eventKey='verNots' onClick={verNotificaciones} >Gestionar notificaciones</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href='#' eventKey='verFichas' onClick={verFichasVeterinarias} >Ver caballos habilitados</Nav.Link>
+                            </Nav.Item>
                         </Nav>
                         <Container>
                             <Button variant='outline-light' onClick={handleLogout} >Cerrar sesión</Button>

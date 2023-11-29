@@ -230,7 +230,7 @@ export default function PrepVets({query}){
                         </Form.Label>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label for='cell'>
+                        <Form.Label htmlFor='cell'>
                             Celular
                             <Container className='cellInput' >
                                 <p className='prefix'>+56</p>

@@ -1,6 +1,7 @@
 import {useState, useEffect, useRef, memo} from 'react'
 import { Container, Button, Form, Spinner, ButtonGroup, Toast } from 'react-bootstrap'
 import { useAuthContext } from '../hooks/useAuthContext'
+import {validate, format} from 'rut.js'
 import cfg from '../cfg.json'
 import axios from 'axios'
 
@@ -45,6 +46,7 @@ export default function AdminPreps({query}){
     const toggleErrorDelete = () => setErrorDelete(!errorDelete)
 
     const handleCorralesCheck = (e) => {
+        e.stopPropagation()
         console.log(e)
         if(!corrales_en_posesion && e.target.checked){
             let plantilla = {
@@ -90,7 +92,7 @@ export default function AdminPreps({query}){
             corrales_en_posesion: corrales_en_posesion.selected
         }
         try{
-            await axios.post('http://localhost:4444/api/users', plantilla, {headers: {Authorization: `Bearer ${user.token}`}})
+            await axios.post(cfg.ruta+'/api/users', plantilla, {headers: {Authorization: `Bearer ${user.token}`}})
             setExito(true)
             query.refetch()
         }catch(err){
@@ -296,7 +298,7 @@ export default function AdminPreps({query}){
                         <div className='vert-btns'>
                             <ButtonGroup vertical>
                                 {
-                                    equipos.map( e => <Button variant='outline-success'>
+                                    equipos.map( e => <Button variant='outline-success' key={e.codigo} >
                                         {e.codigo}
                                     </Button> )
                                 }
@@ -307,7 +309,7 @@ export default function AdminPreps({query}){
                             <p> Rut: {selectedPrep.prep[0].rut} </p>
                             <p> Email: {selectedPrep.prep[0].email} </p>
                             <p> Celular: {selectedPrep.prep[0].cell} </p>
-                            <p> Corrales: { selectedPrep.corrales.map( (c, i) => <strong> {c.cod_corral}{ i<selectedPrep.corrales.length-1 ? (',') : null }  </strong> ) } </p>
+                            <p> Corrales: { selectedPrep.corrales.map( (c, i) => <strong key={i} > {c.cod_corral}{ i<selectedPrep.corrales.length-1 ? (',') : null }  </strong> ) } </p>
                             <hr/>
                             <Button variant='outline-danger'>Eliminar equipo</Button>
                             <hr/>
@@ -315,13 +317,13 @@ export default function AdminPreps({query}){
                             {
                                 !selectedPrep.vets[0] ? <p className='text-warning'>Sin veterinarios registrados</p> : <>
                                     {
-                                        selectedPrep.vets.map( vet => <>
+                                        selectedPrep.vets.map( vet => <Container key={vet.rut} >
                                             <p className='minititle' > {vet.nombre} </p>
                                             <p> Rut: {vet.rut} </p>
                                             <p> Email: {vet.email} </p>
                                             <p> Celular: {vet.cell} </p>
                                             <hr/>
-                                        </> )
+                                        </Container> )
                                     }
                                 </>
                             }
@@ -329,14 +331,14 @@ export default function AdminPreps({query}){
                             {
                                 !selectedPrep.horses[0] ? <p className='text-warning'>Sin caballos registrados</p> : <>
                                     {
-                                        selectedPrep.horses.map( h => <>
+                                        selectedPrep.horses.map( h => <Container key={h.codigo_caballo} >
                                             <p className='minititle'> {h.nombre} </p>
                                             <p> Propietario: {h.propietario} </p>
                                             <p> Código: {h.codigo_caballo} </p>
                                             <p> Corral: {h.codigo_corral} </p>
                                             <p> Ficha médica: { h.ficha[0] ? <strong className='text-success'> Si </strong> : <strong className='text-danger'> No </strong> } </p>
                                             <hr/>
-                                        </> )
+                                        </Container> )
                                     }
                                 </>
                             }

@@ -8,7 +8,6 @@ export default function AdminHome({query}){
     useEffect( () => {
         if(query){
             if(query.isFetched){
-                console.log(query.data)
                 setQueryData(query.data)
                 setRender(true)
             }
@@ -23,107 +22,214 @@ export default function AdminHome({query}){
             {query.isLoading ? <Spinner variant='success'/> : null}
             {
                 render && queryData ? <Container fluid>
-                    <Row key='row1'>
+                    <Row>
                         {
-                            queryData.map( (e, i) => (
-                                <>
-                                    { (i >= 0 && i < 10) ? <Col className='elemento' key={`Col${i}`} >
-                                        { e.prep === 'open' ? <>
-                                            <p> Código: {e.codigo} </p>
-                                            <p> Estado: <strong className='text-success'> Disponible </strong> </p>
-                                        </> : <>
-                                            <p> Código: {e.codigo} </p>
-                                            <p> Preparador: <strong> {e.prep[0].nombre} </strong> </p>
-                                            <hr/>
-                                            <p> Corrales: { e.corrales.map( c => <strong key={c.cod_corral} > {c.cod_corral}, </strong> )  } </p>
-                                            <hr/>
-                                            <p> Veterinarios: {e.vets.length} </p>
-                                            <hr/>
-                                            <p> Caballos: {e.horses.length} </p>
-                                        </> }
-                                    </Col> : null }
-                                </>
-                            ) )
+                            queryData.map( (e, i) => {
+                                if(i >= 0 && i < 10){
+                                    return(
+                                        <Col key={i} className='elemento'>
+                                            {
+                                                e.prep === 'open' ? <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Estado: <strong className='text-success'>Disponible</strong> </p>
+                                                </> : <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Prepardor: <strong> {e.prep[0].nombre} </strong> </p>
+                                                    <hr/>
+                                                    <p>
+                                                        Corrales:  {
+                                                            e.corrales.map( (c, i) => <strong key={c.cod_corral}>
+                                                                {c.cod_corral}{(i < e.corrales.length-1) ? (', ') : null}
+                                                            </strong> )
+                                                        }
+                                                    </p>
+                                                    <hr/>
+                                                    <p>Veterinarios: {e.vets.length} </p>
+                                                    <hr/>
+                                                    <p>Caballos: {e.horses.length} </p>
+                                                </>
+                                            }
+                                        </Col>
+                                    )
+                                }else{
+                                    return null
+                                }
+                            } )
                         }
                     </Row>
-                    <Row key={'row2'}>
+                    <Row>
                         {
-                            queryData.map( (e, i) => (
-                                <>
-                                    { (i >= 10 && i < 20) ? <Col className='elemento' key={i}>
-                                        { e.prep === 'open' ? <>
-                                            <p> Código: {e.codigo} </p>
-                                            <p> Estado: <strong className='text-success'> Disponible </strong> </p>
-                                        </> : <>
-
-                                        </> }
-                                    </Col> : null }
-                                </>
-                            ) )
+                            queryData.map( (e, i) => {
+                                if(i >= 10 && i < 20){
+                                    return(
+                                        <Col key={i} className='elemento'>
+                                            {
+                                                e.prep === 'open' ? <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Estado: <strong className='text-success'>Disponible</strong> </p>
+                                                </> : <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Prepardor: <strong> {e.prep[0].nombre} </strong> </p>
+                                                    <hr/>
+                                                    <p>
+                                                        Corrales:  {
+                                                            e.corrales.map( (c, i) => <strong key={c.cod_corral}>
+                                                                {c.cod_corral}{(i < e.corrales.length-1) ? (', ') : null}
+                                                            </strong> )
+                                                        }
+                                                    </p>
+                                                    <hr/>
+                                                    <p>Veterinarios: {e.vets.length} </p>
+                                                    <hr/>
+                                                    <p>Caballos: {e.horses.length} </p>
+                                                </>
+                                            }
+                                        </Col>
+                                    )
+                                }else{
+                                    return null
+                                }
+                            } )
                         }
                     </Row>
-                    <Row key={'row3'}>
+                    <Row>
                         {
-                            queryData.map( (e, i) => (
-                                <>
-                                    { (i >= 20 && i < 30) ? <Col className='elemento' key={i}>
-                                        { e.prep === 'open' ? <>
-                                            <p> Código: {e.codigo} </p>
-                                            <p> Estado: <strong className='text-success'> Disponible </strong> </p>
-                                        </> : <>
-
-                                        </> }
-                                    </Col> : null }
-                                </>
-                            ) )
+                            queryData.map( (e, i) => {
+                                if(i >= 20 && i < 30){
+                                    return(
+                                        <Col key={i} className='elemento'>
+                                            {
+                                                e.prep === 'open' ? <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Estado: <strong className='text-success'>Disponible</strong> </p>
+                                                </> : <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Prepardor: <strong> {e.prep[0].nombre} </strong> </p>
+                                                    <hr/>
+                                                    <p>
+                                                        Corrales:  {
+                                                            e.corrales.map( (c, i) => <strong key={c.cod_corral}>
+                                                                {c.cod_corral}{(i < e.corrales.length-1) ? (', ') : null}
+                                                            </strong> )
+                                                        }
+                                                    </p>
+                                                    <hr/>
+                                                    <p>Veterinarios: {e.vets.length} </p>
+                                                    <hr/>
+                                                    <p>Caballos: {e.horses.length} </p>
+                                                </>
+                                            }
+                                        </Col>
+                                    )
+                                }else{
+                                    return null
+                                }
+                            } )
                         }
                     </Row>
-                    <Row key={'row4'}>
+                    <Row>
                         {
-                            queryData.map( (e, i) => (
-                                <>
-                                    { (i >= 30 && i < 40) ? <Col className='elemento' key={i}>
-                                        { e.prep === 'open' ? <>
-                                            <p> Código: {e.codigo} </p>
-                                            <p> Estado: <strong className='text-success'> Disponible </strong> </p>
-                                        </> : <>
-
-                                        </> }
-                                    </Col> : null }
-                                </>
-                            ) )
+                            queryData.map( (e, i) => {
+                                if(i >= 30 && i < 40){
+                                    return(
+                                        <Col key={i} className='elemento'>
+                                            {
+                                                e.prep === 'open' ? <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Estado: <strong className='text-success'>Disponible</strong> </p>
+                                                </> : <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Prepardor: <strong> {e.prep[0].nombre} </strong> </p>
+                                                    <hr/>
+                                                    <p>
+                                                        Corrales:  {
+                                                            e.corrales.map( (c, i) => <strong key={c.cod_corral}>
+                                                                {c.cod_corral}{(i < e.corrales.length-1) ? (', ') : null}
+                                                            </strong> )
+                                                        }
+                                                    </p>
+                                                    <hr/>
+                                                    <p>Veterinarios: {e.vets.length} </p>
+                                                    <hr/>
+                                                    <p>Caballos: {e.horses.length} </p>
+                                                </>
+                                            }
+                                        </Col>
+                                    )
+                                }else{
+                                    return null
+                                }
+                            } )
                         }
                     </Row>
-                    <Row key={'row5'}>
+                    <Row>
                         {
-                            queryData.map( (e, i) => (
-                                <>
-                                    { (i >= 40 && i < 50) ? <Col className='elemento' key={i}>
-                                        { e.prep === 'open' ? <>
-                                            <p> Código: {e.codigo} </p>
-                                            <p> Estado: <strong className='text-success'> Disponible </strong> </p>
-                                        </> : <>
-
-                                        </> }
-                                    </Col> : null }
-                                </>
-                            ) )
+                            queryData.map( (e, i) => {
+                                if(i >= 40 && i < 50){
+                                    return(
+                                        <Col key={i} className='elemento'>
+                                            {
+                                                e.prep === 'open' ? <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Estado: <strong className='text-success'>Disponible</strong> </p>
+                                                </> : <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Prepardor: <strong> {e.prep[0].nombre} </strong> </p>
+                                                    <hr/>
+                                                    <p>
+                                                        Corrales:  {
+                                                            e.corrales.map( (c, i) => <strong key={c.cod_corral}>
+                                                                {c.cod_corral}{(i < e.corrales.length-1) ? (', ') : null}
+                                                            </strong> )
+                                                        }
+                                                    </p>
+                                                    <hr/>
+                                                    <p>Veterinarios: {e.vets.length} </p>
+                                                    <hr/>
+                                                    <p>Caballos: {e.horses.length} </p>
+                                                </>
+                                            }
+                                        </Col>
+                                    )
+                                }else{
+                                    return null
+                                }
+                            } )
                         }
                     </Row>
-                    <Row key={'row6'}>
+                    <Row>
                         {
-                            queryData.map( (e, i) => (
-                                <>
-                                    { (i >= 50 && i <= 59) ? <Col className='elemento' key={i}>
-                                        { e.prep === 'open' ? <>
-                                            <p> Código: {e.codigo} </p>
-                                            <p> Estado: <strong className='text-success'> Disponible </strong> </p>
-                                        </> : <>
-
-                                        </> }
-                                    </Col> : null }
-                                </>
-                            ) )
+                            queryData.map( (e, i) => {
+                                if(i >= 50 && i <= 59){
+                                    return(
+                                        <Col key={i} className='elemento'>
+                                            {
+                                                e.prep === 'open' ? <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Estado: <strong className='text-success'>Disponible</strong> </p>
+                                                </> : <>
+                                                    <p>Código: {e.codigo} </p>
+                                                    <p>Prepardor: <strong> {e.prep[0].nombre} </strong> </p>
+                                                    <hr/>
+                                                    <p>
+                                                        Corrales:  {
+                                                            e.corrales.map( (c, i) => <strong key={c.cod_corral}>
+                                                                {c.cod_corral}{(i < e.corrales.length-1) ? (', ') : null}
+                                                            </strong> )
+                                                        }
+                                                    </p>
+                                                    <hr/>
+                                                    <p>Veterinarios: {e.vets.length} </p>
+                                                    <hr/>
+                                                    <p>Caballos: {e.horses.length} </p>
+                                                </>
+                                            }
+                                        </Col>
+                                    )
+                                }else{
+                                    return null
+                                }
+                            } )
                         }
                     </Row>
                 </Container> : 

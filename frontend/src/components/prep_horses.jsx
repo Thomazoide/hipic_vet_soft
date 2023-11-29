@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react'
-import { Container, Button, Form, Spinner, ButtonGroup, Toast } from 'react-bootstrap'
+import { Container, Button, Form, Spinner, ButtonGroup, Toast, CloseButton, Dropdown } from 'react-bootstrap'
 import { useAuthContext } from '../hooks/useAuthContext'
 import cfg from '../cfg.json'
 import axios from 'axios'
@@ -10,6 +10,10 @@ export default function PrepHorses({query}){
     const [render, setRender] = useState(false)
     const [exito, setExito] = useState(false)
     const [error, setError] = useState(false)
+    const [changeCrr, setChangeCrr] = useState(false)
+    const [changePptr, setChangePptr] = useState(false)
+    const [habilChangeCr, setHabilChangeCr] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [equipo, setEquipo] = useState('')
     const [selectedHorse, setSelectedHorse] = useState(null)
     const {user} = useAuthContext()
@@ -38,9 +42,64 @@ export default function PrepHorses({query}){
     //bloque efectos
     //bloque funciones
 
+    const toggleChangePptr = () => setChangePptr(!changePptr)
+
+    const toggleChangeCrr = () => setChangeCrr(!changeCrr)
+
     const toggleExito = () => setExito(!exito)
 
     const toggleError = () => setError(!error)
+
+    const handleChangeCrr = (e) => {
+        if(e.target.value === selectedHorse.codigo_corral){
+            console.log(crr.current.value)
+            setHabilChangeCr(true)
+        }else{
+            console.log(crr.current.value)
+            setHabilChangeCr(false)
+        }
+    }
+
+    const submitNewPptr = async (e) => {
+        e.preventDefault()
+        const aux = {
+            ...selectedHorse,
+            newPptr: propietario.current.value
+        }
+        try{
+            setIsLoading(true)
+            await axios.put(cfg.ruta+'/api/caballos', aux, {headers: {Authorization: `Bearer ${user.token}`}})
+            setExito(true)
+            query.refetch()
+            setIsLoading(false)
+            setChangePptr(false)
+        }catch(err){
+            setError(true)
+            query.refetch()
+            setIsLoading(false)
+            setChangePptr(false)
+        }
+    }
+
+    const cambiarCorralCaballo = async () => {
+        const aux = {
+            ...selectedHorse,
+            newCr: crr.current.value
+        }
+        try{
+            setIsLoading(true)
+            await axios.put(cfg.ruta+'/api/caballos', aux, {headers: {Authorization: `Bearer ${user.token}`}})
+            setExito(true)
+            query.refetch()
+            setIsLoading(false)
+            setChangeCrr(false)
+        }catch(err){
+            setError(true)
+            query.refetch()
+            setIsLoading(false)
+            setChangeCrr(false)
+        }
+    }
 
     const handleSelect = (e) => {
         for(let h of query.data.horses){
@@ -156,9 +215,65 @@ export default function PrepHorses({query}){
                         </Container>
                         <Container className='lista-preps'>
                             <h1> {selectedHorse.nombre} </h1>
-                            <p>Propietario: {selectedHorse.propietario}</p>
+                            <p>Propietario: {selectedHorse.propietario} {!changePptr ? <Button variant='outline-warning' size='sm' onClick={toggleChangePptr}>Cambiar propietario</Button> : null} </p>
+                            {
+                                changePptr ? <div className='bloque-razon'>
+                                    <Container className='bloque-razon-header'>
+                                        <small>Cambiar propietario</small>
+                                        <div className='btn-cerrar-razon'>
+                                            <CloseButton variant='white' onClick={toggleChangePptr}/>
+                                        </div>
+                                    </Container>
+                                    <Container className='bloque-razon-change'>
+                                        <Form onSubmit={submitNewPptr} >
+                                            <Form.Group>
+                                                <Form.Label>
+                                                    Nuevo propietario/a
+                                                    <Form.Control
+                                                    id='newPptr'
+                                                    type='text'
+                                                    size='sm'
+                                                    required
+                                                    placeholder='Nombre Apellido'
+                                                    ref={propietario} />
+                                                </Form.Label>
+                                            </Form.Group>
+                                            <Form.Group className='btn-crear-prep'>
+                                                <Container>
+                                                    <Button variant='success' size='sm' type='submit'>Actualizar propietario</Button>
+                                                </Container>
+                                                {isLoading ? <Spinner variant='success' size='sm'/> : null}
+                                            </Form.Group>
+                                        </Form>
+                                    </Container>
+                                </div> : null
+                            }
                             <p> Codigo de caballo: {selectedHorse.codigo_caballo} </p>
-                            <p> Corral: {selectedHorse.codigo_corral} </p>
+                            <p> Corral: {selectedHorse.codigo_corral} { !changeCrr ? <Button variant='outline-warning' size='sm' onClick={toggleChangeCrr} >Cambiar de corral</Button> : null} </p>
+                            {
+                                changeCrr ? <div className='bloque-razon'>
+                                    <Container className='bloque-razon-header'>
+                                        <small> Seleccionar corral </small>
+                                        <div className='btn-cerrar-razon'>
+                                            <CloseButton variant='white' onClick={toggleChangeCrr}/>
+                                        </div>
+                                    </Container>
+                                    <Container className='bloque-razon-change'>
+                                        <p> <small>Corral: </small> <Form.Select defaultValue={selectedHorse.codigo_corral} ref={crr} onChange={handleChangeCrr} size='sm'>
+                                            {
+                                                query.data.corrales.map( (c, i) => (
+                                                    <option value={c.cod_corral} key={i}> {c.cod_corral} </option>
+                                                ) )
+                                            }
+                                        </Form.Select>
+                                        </p>
+                                        <p>
+                                            <Button variant='success' size='sm' disabled={habilChangeCr} onClick={cambiarCorralCaballo} >Guardar cambio</Button>
+                                        </p>
+                                        {isLoading ? <Spinner variant='success' size='sm'/> : null}
+                                    </Container>
+                                </div> : null
+                            }
                             <hr/>
                             <p>Estado ficha: { 
                                 selectedHorse.ficha[0] ? <strong className='text-success'>Ficha creada</strong> : <strong className='text-warning'>No tiene ficha creada</strong>
@@ -171,6 +286,8 @@ export default function PrepHorses({query}){
                 </Container> : null
             }
             <Container className='lista-crear-preps'>
+                <h1>Crear caballos</h1>
+                <hr/>
                 <Form onSubmit={crearCaballo}>
                     <Form.Group>
                         <Form.Label>

@@ -12,7 +12,7 @@ const requireAuth = async (req, res, next) => {
         req.user = await Usuarios.findOne({_id})
         next()
     }catch(err){
-        res.status(401).json({mensaje: 'TIMEDOUT'})
+        res.status(401).json({mensaje: 'TIMEOUT'})
     }
 }
 

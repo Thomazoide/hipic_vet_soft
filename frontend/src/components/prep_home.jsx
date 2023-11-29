@@ -57,8 +57,8 @@ export default function PrepHome({query}){
                                     {
                                         !c.caballos[0] ? <p className="text-warning"> Corral sin caballos... </p> : <>
                                             {
-                                                c.caballos.map( h => (
-                                                    <Container key={h.codigo_caballo} >
+                                                c.caballos.map( (h, i) => (
+                                                    <Container className="corral-content"  key={h.codigo_caballo} >
                                                         <p> Nombre: {h.nombre} </p>
                                                         <p> Propietario: {h.propietario} </p>
                                                         <p>Ficha creada:
@@ -66,6 +66,7 @@ export default function PrepHome({query}){
                                                                 !h.ficha[0] ? <strong className="text-danger"> No </strong> : <strong className="text-success"> Si </strong>
                                                             }
                                                         </p>
+                                                        { i < c.caballos.length-1 ? <hr/> : null }
                                                     </Container>
                                                 ) )
                                             }
