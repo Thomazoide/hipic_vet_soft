@@ -1,4 +1,4 @@
 {
-    "rutaA": "https://tsi97wk2d8.execute-api.us-east-1.amazonaws.com",
-    "ruta": "http://localhost:4444"
+    "ruta": "https://tsi97wk2d8.execute-api.us-east-1.amazonaws.com",
+    "rutaA": "http://localhost:4444"
 }
