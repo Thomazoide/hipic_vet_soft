@@ -9,7 +9,7 @@ app.use(express.json())
 
 
 app.use(cors({
-    origin: ['http://34.230.2.165:5173']
+    //origin: ['http://34.230.2.165:5173', 'http://localhost:4444']
 }))
 
 
@@ -20,5 +20,7 @@ app.use('/api/caballos', require('./../routes/caballos.routes'))
 app.use('/api/fichas', require('./../routes/ficha_medica.routes'))
 app.use('/api/login', require('./../routes/login.routes'))
 app.use('/api/notis', require('../routes/notificaciones.routes'))
+app.use('/api/teams', require('./../routes/equipos.routes'))
+app.use('/api/corrales', require('./../routes/corrales.routes'))
 
 module.exports = app

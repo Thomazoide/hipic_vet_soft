@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react"
 import { useNavigate } from "react-router"
 import {Container, Navbar, Form, Button, Image} from 'react-bootstrap'
+import {format} from 'rut.js'
 import { useAuthContext } from "../hooks/useAuthContext"
 import { useLogin } from "../hooks/useLogin"
 import logo from '../assets/horse-32.ico'
@@ -29,14 +30,14 @@ export default function InterfazLogin(){
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        await login(rut.current.value, pass.current.value)
+        await login(format(rut.current.value, {dots: false}), pass.current.value)
     }
 
     return(
         <Container fluid className="cuerpo p-0">
             <Container fluid className="barra-nav p-0">
                 <Navbar variant="success" bg="success">
-                    <Navbar.Brand className="navTitle" as='h1'> <Image src={logo}/> Hipic Vet-Soft </Navbar.Brand>
+                    <Navbar.Brand className="navTitle" as='h1'> <Image src={logo}/> Hipic Vet </Navbar.Brand>
                 </Navbar>
             </Container>
             <hr/>
@@ -49,14 +50,15 @@ export default function InterfazLogin(){
                             <Form.Control
                             type="text"
                             placeholder="Sin puntos y con guión (Ej: xxxxxxxx-x)"
-                            ref={rut} />
+                            ref={rut}
+                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>
                                 Contraseña
                                 <Form.Control
                                 type="password"
-                                ref={pass} />
+                                ref={pass}/>
                                 </Form.Label>
                         </Form.Group>
                         <Form.Group>
@@ -72,5 +74,4 @@ export default function InterfazLogin(){
             </Container>
         </Container>
     )
-
 }

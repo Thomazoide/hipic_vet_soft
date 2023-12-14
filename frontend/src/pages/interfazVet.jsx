@@ -57,11 +57,10 @@ export default function InterfazVet(){
         <Container className="cuerpo p-0" fluid>
             <Container className="barra-nav p-0" fluid>
                 <Navbar variant='success' bg='success' className='navbar'collapseOnSelect expand='sm'>
-                    <Navbar.Brand as='h1' className='navTitle'> <Image src={logo}/> Hipic Vet-Soft</Navbar.Brand>
+                    <Navbar.Brand as='h1' className='navTitle'> <Button variant="outline-light" onClick={verHome} > <Image src={logo}/> Hipic Vet </Button> </Navbar.Brand>
                     <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
                     <Navbar.Collapse id='responsive-navbar-nav' className='responsive-navbar-nav justify-content-*-between'>
                         <Nav className='me-auto'>
-                            <Nav.Link href='#' onClick={verHome} >Inicio</Nav.Link>
                             <Nav.Link href='#' onClick={verFichas} >Gestionar fichas</Nav.Link>
                             <Nav.Link href='#' onClick={verNotificaciones} >Ver notificaciones</Nav.Link>
                         </Nav>

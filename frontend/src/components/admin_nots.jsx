@@ -27,11 +27,13 @@ export default function AdminNots({query, ntfcns}){
     useEffect( () => {
         if(Array.isArray(query.data)){
             if(Array.isArray(ntfcns.data)){
-                let arr = []
-                for(let p of query.data){
-                    arr.push(p.cod_equipo)
-                }
-                setEquipos(arr)
+                let arr = query.data.filter( e => (e.prep !== 'open' && !Array.isArray(e) ) )
+                console.log(arr)
+                let arr2 = []
+                arr.forEach( a => {
+                    arr2.push(a.codigo)
+                } )
+                setEquipos(arr2)
                 setFilteredNots(ntfcns.data)
                 setRenderizar(true)
             }else{
@@ -67,7 +69,7 @@ export default function AdminNots({query, ntfcns}){
         else if(event === 'all'){
             setFiltro(event)
             aux = ntfcns.data.filter( n => n.target === 'all' )
-            if(aux.length > 0){
+            if(aux[0]){
                 setFilteredNots(aux)
             }else{
                 aux.push(indc)
@@ -76,7 +78,7 @@ export default function AdminNots({query, ntfcns}){
         }else{
             setFiltro(event)
             aux = ntfcns.data.filter( n => n.target === event )
-            if(aux.length > 0){
+            if(aux[0]){
                 setFilteredNots(aux)
             }else{
                 aux.push(indc)

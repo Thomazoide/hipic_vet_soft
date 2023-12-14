@@ -1,30 +1,79 @@
 import {useState, useEffect} from 'react'
-import { Container, Dropdown, Spinner } from 'react-bootstrap'
+import { Container, Dropdown, Spinner, CloseButton } from 'react-bootstrap'
 
 export default function AdminFichas({query}){
     //bloque variables
 
     const [selectedTeam, setSelectedTeam] = useState({})
+    const [equipos, setEquipos] = useState(null)
     const [renderizar, setRenderizar] = useState(false)
     const [noTeams, setNoTeams] = useState(false)
+    const [razon, setRazon] = useState(null)
 
     //bloque variables
     //bloque efectos
 
     useEffect( () => {
-        if(Array.isArray(query.data)){
-            if(query.data.length > 0){
+        if(query.data){
+            const qd = query.data.filter( t => ( t.prep !== 'open' && !Array.isArray(t) ) )
+            if(qd[0]){
+                for(let t of qd){
+                    if(t.horses[0]){
+                        for(let h of t.horses){
+                            const arr = []
+                            if(h.ficha[0]){
+                                for(let e of h.ficha[0].examenes){
+                                    e.cal = 'Exámen'
+                                    arr.push(e)
+                                }
+                                for(let e of h.ficha[0].vacunaciones){ 
+                                    e.cal = 'Vacunación'
+                                    arr.push(e)
+                                }
+                                for(let e of h.ficha[0].operaciones){ 
+                                    e.cal = 'Cirugía'
+                                    arr.push(e)
+                                }
+                            }
+                            if(arr[0]){
+                                h.razon = arr.reduce( (maxFechaObjeto, objeto) => {
+                                    const fechaObjeto = new Date( objeto.cod.split('_')[1] )
+                                    const fechaMax = new Date( maxFechaObjeto.cod.split('_')[1] )
+                                    return fechaObjeto > fechaMax ? objeto : maxFechaObjeto
+                                }, arr[0] )
+                                h.razon.cod_hs = h.codigo_caballo
+                            }else{
+                                h.razon = {
+                                    cal: 'NE',
+                                    tipo: 'Sin exámenes realizados',
+                                    descripcion: 'Se recomienda notificar al equipo al respecto...',
+                                    cod_hs: h.codigo_caballo
+                                }
+                            }
+                        }
+                    }
+                }
+                setEquipos(qd)
+                setNoTeams(false)
                 setRenderizar(true)
-                setSelectedTeam(query.data[0])
-            }else{
-                setNoTeams(true)
-                setRenderizar(false)
+                setSelectedTeam(qd[0])
             }
+        }else{
+            setNoTeams(true)
+            setRenderizar(false)
         }
+        
     }, [query] )
 
     //bloque efectos
     //bloque funciones
+
+    const cerrarRazon = () => setRazon(null)
+
+    const toggleVerRazon = (e) => {
+        const rea = JSON.parse(e.target.value)
+        setRazon(rea)
+    }
 
     const handleSelect = (e) => {
         let auxSel
@@ -42,21 +91,21 @@ export default function AdminFichas({query}){
     const TeamsData = () => {
         return(
             <Container>
-                <Dropdown onSelect={handleSelect}>
+                {equipos ? <Dropdown onSelect={handleSelect}>
                     <Dropdown.Toggle variant='success'>
-                        Equipo: {selectedTeam.cod_equipo}
+                        Equipo: {selectedTeam.codigo}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu>
+                    <Dropdown.Menu className='team-dropdown' >
                         {
-                            query.data.map( p => (
-                                <Dropdown.Item eventKey={p.cod_equipo} key={p.cod_equipo}>
-                                    {p.cod_equipo}
+                            equipos.map( p => (
+                                <Dropdown.Item eventKey={p.codigo} key={p.codigo}>
+                                    {p.codigo}
                                 </Dropdown.Item>
                             ) )
                         }
                     </Dropdown.Menu>
-                </Dropdown>
-                { selectedTeam.horses ?
+                </Dropdown>: <Spinner variant='success' size='sm'/> }
+                { selectedTeam.horses[0] ?
                     <Container className='lista-caballos'>
                         <h3>Caballos con ficha</h3>
                         <Container className='ficha-info'>
@@ -69,6 +118,33 @@ export default function AdminFichas({query}){
                                                 <p>Codigo: {h.codigo_caballo}</p>
                                                 <p>Peso: {h.ficha[0].peso['$numberDecimal']}</p>
                                                 <p>Habilitado:  { h.ficha[0].habilitado ? <strong className='text-success'>SI</strong> : <strong className='text-danger'>NO</strong> } </p>
+                                                <button className={`btn-info ${!razon ? '' : 'desactivado'}`} disabled={ (!razon && h.razon) ? (false) : (true) } value={ h.razon ? JSON.stringify(h.razon) : null} onClick={ h.razon ? toggleVerRazon : null}> ? </button>
+                                                {
+                                                    (razon && razon.cal !== 'NE' && razon.cod_hs === h.codigo_caballo ) ? <div className='bloque-razon' >
+                                                        <Container className='bloque-razon-header'>
+                                                            <p> <small className='text-warning' > El siguiente exámen justifica el estado del caballo: </small> </p>
+                                                            <div className='btn-cerrar-razon'>
+                                                                <CloseButton onClick={cerrarRazon} variant='white' />
+                                                            </div>
+                                                        </Container>
+                                                        <div className='bloque-razon-content'>
+                                                            <p> <small className='text-secondary' > Tipo: {razon.cal} </small> </p>
+                                                            <p> <small className='text-secondary' > Título: {razon.tipo} </small> </p>
+                                                            <p> <small className='text-secondary' > Descripción: {razon.descripcion} </small> </p>
+                                                            <p> <small className='text-secondary' > Fecha: {razon.fecha} </small> </p>
+                                                        </div>
+                                                    </div> : (razon && razon.cal === 'NE' && razon.cod_hs === h.codigo_caballo) ? <div className='bloque-razon'>
+                                                        <Container className='bloque-razon-header'>
+                                                            <p> <small className='text-danger'> {razon.tipo} </small> </p>
+                                                            <div className='btn-cerrar-razon'>
+                                                                <CloseButton onClick={cerrarRazon} variant='white' />
+                                                            </div>
+                                                        </Container>
+                                                        <div className='bloque-razon-content'>
+                                                            <p> <small className='text-warning'> {razon.descripcion} </small> </p>
+                                                        </div>
+                                                    </div> : null
+                                                }
                                             </Container>
                                         )
                                     }
@@ -107,14 +183,6 @@ export default function AdminFichas({query}){
         return(
             <Container className='lista-caballos'>
                 <h1>Error al obtener datos<br/>Se recomienda iniciar sesion nuevamente...</h1>
-            </Container>
-        )
-    }
-
-    if(query.data.length < 1){
-        return(
-            <Container className='lista-caballos'>
-                <h1>No hay fichas creadas en ningun equipo</h1>
             </Container>
         )
     }

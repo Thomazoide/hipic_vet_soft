@@ -66,9 +66,16 @@ export default function VetFichas({query}){
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        let rId = Math.random().toString(36).substring(2, 9)
+        let actualDate = new Date()
+        actualDate = actualDate.toISOString()
+        let cod = `_${rId}_${actualDate}`
+
         let auxFicha = selectedHorse.ficha[0]
         auxFicha.habilitado = isHab.current.value
         const auxPush = {
+            cod: cod,
             tipo: tipo.current.value,
             descripcion: desc.current.value,
             fecha: fecha.current.value
@@ -76,7 +83,6 @@ export default function VetFichas({query}){
         if(te === 'examen') auxFicha.examenes.push(auxPush)
         if(te === 'vacuna') auxFicha.vacunaciones.push(auxPush)
         if(te === 'cirugia') auxFicha.operaciones.push(auxPush)
-
         try{
             await axios.put(cfg.ruta+'/api/fichas', auxFicha, {headers: {Authorization: `Bearer ${user.token}`}}).then( res => {
                 if(res.status == 200){
@@ -236,7 +242,7 @@ export default function VetFichas({query}){
                     <Container>
                         <Dropdown onSelect={handleSelection}>
                             <Dropdown.Toggle variant='success'>
-                                {selectedHorse.nombre} || {selectedHorse.codigo_caballo}
+                                Caballo: {selectedHorse.nombre} || Código: {selectedHorse.codigo_caballo}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 {
@@ -326,7 +332,9 @@ export default function VetFichas({query}){
                     </Container>
                 </Container>
                 :
-                <Container className='lista-caballos'></Container>
+                <Container className='lista-caballos'>
+                    <h3 className='text-warning'> No hay ninguna ficha creada... </h3>
+                </Container>
             }
         </Container>
     )
