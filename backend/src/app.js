@@ -9,7 +9,7 @@ app.use(express.json())
 
 
 app.use(cors({
-    //origin: ['http://34.230.2.165:5173', 'http://localhost:4444']
+    origin: ['http://34.230.2.165:5173', 'http://localhost:4444', 'https://tsi97wk2d8.execute-api.us-east-1.amazonaws.com', 'https://hipic-vet-soft.vercel.app/']
 }))
 
 
