@@ -65,7 +65,7 @@ body{
     border-radius: 5px;
     border-width: 1px;
     border-color: gray;
-    max-height: 200px;
+    max-height: 600px;
     max-width: 300px;
 }
 
@@ -113,6 +113,11 @@ body{
 .bloque-razon-change{
     padding: 5px;
     max-height: 200px;
+}
+
+.test-section{
+    display: flex;
+    flex-direction: column;
 }
 
 .corral{
@@ -198,8 +203,10 @@ body{
 }
 
 .ficha-info{
+    max-width: 100vh;
     display: flex;
     flex-direction: row;
+    overflow-x: scroll;
 }
 
 .navbar{

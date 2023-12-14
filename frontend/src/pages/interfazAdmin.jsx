@@ -52,7 +52,12 @@ export default function InterfazAdmin(){
                     }
                 } )
                 let corralesDisponibles = crls.filter( c => c.equipo === 'open' )
+                let vetsDisponibles = usrs.filter( u => (u.tipo === 'veterinario' && u.cod_equipo === 'open') )
+                let caballosDisponibles = hrss.filter( h => h.codigo_equipo === 'open' )
+                if(caballosDisponibles[0]) caballosDisponibles.forEach( c => c.ficha = fchs.filter( f => f.codigo === c.codigo_caballo ) )
                 eqps.push(corralesDisponibles)
+                eqps.push(vetsDisponibles)
+                eqps.push(caballosDisponibles)
                 return eqps
                 
             }else return null
@@ -107,7 +112,7 @@ export default function InterfazAdmin(){
                     <Navbar.Collapse id='responsive-navbar-nav' className='responsive-navbar-nav justify-content-*-around'>
                         <Nav fill variant="tabs" className='me-auto' >
                             <Nav.Item >
-                                <Nav.Link href='#' eventKey='verPreps' onClick={verPreparadores} >Gestionar preparadores</Nav.Link>
+                                <Nav.Link href='#' eventKey='verPreps' onClick={verPreparadores} >Gestionar equipos</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
                                 <Nav.Link href='#' eventKey='verNots' onClick={verNotificaciones} >Gestionar notificaciones</Nav.Link>

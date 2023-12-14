@@ -326,7 +326,7 @@ export default function PrepHorses({query}){
                     <Form.Group>
                         <Form.Label>
                             Corral
-                            <Form.Select id='crr' ref={crr}>
+                            <Form.Select id='crr' ref={crr} size='sm'>
                                 {
                                     query.data.corrales.map( c => (
                                         <option disabled={ c.cant_caballos < c.capacidad ? (false) : (true) } key={c.cod_corral} value={c.cod_corral}> {c.cod_corral} </option>

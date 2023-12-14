@@ -15,7 +15,8 @@ horseCtrl.getHorses = async (req, res) => {
 horseCtrl.setHorse = async (req, res) => {
     try{
         const {nombre, propietario, codigo_equipo, codigo_corral} = req.body
-        const codigo_caballo = `${nombre.slice(0, 3)}${propietario.slice(-3)}`
+        const keygen = Math.random().toString(36).substring(2, 9)
+        const codigo_caballo = `${nombre.slice(0, 3)}_${keygen}_${propietario.slice(-3)}`
         const crls = await Corrales.findOne({cod_corral: codigo_corral})
         crls.cant_caballos += 1
         console.log(crls)
@@ -58,8 +59,9 @@ horseCtrl.updateHorse = async (req, res) => {
             await Caballos.updateOne({_id: newHorse._id}, newHorse)
             res.status(200).json(newHorse)
             return
-        }else{
-            throw new Error('Valores requeridos...')
+        }else if(oldHorse.nt){
+            await Caballos.updateOne({codigo_caballo: oldHorse.codigo_caballo}, {codigo_equipo: oldHorse.nt})
+            res.status(200).json({message: 'Exito en la operacion...'})
         }
     }catch(err){
         res.status(400).json({mensaje: 'Error'})
@@ -76,6 +78,20 @@ horseCtrl.delHorse = async (req, res) => {
         res.status(200).json({mensaje: 'Exito en la operación...'})
     }catch(err){
         res.status(400).json({mensaje: 'Error en la operación...'})
+    }
+}
+
+horseCtrl.patchHorses = async (req, res) => {
+    try{
+        let horses = req.body.horses
+        let hsIDS = []
+        horses.forEach( h => {
+            hsIDS.push(h._id)
+        } )
+        await Caballos.updateMany({_id: {$in: hsIDS}}, {codigo_equipo: 'open'})
+        res.status(200).json({message: 'Exito en la operacion...'})
+    }catch(err){
+        res.status(400).json({message: 'Error en la operacion...'})
     }
 }
 

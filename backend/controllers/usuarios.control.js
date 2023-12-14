@@ -33,15 +33,35 @@ userCtrl.setUser = async (req, res) => {
         }
         res.status(200).json({rut, newUser})
     }catch(err){
+        console.log(err)
         res.status(400).json(err.message)
     }
 }
 
 userCtrl.delUser = async (req, res) => {
     try{
-        const {_id} = req.body
-        await Usuarios.findByIdAndDelete({_id})
-        res.status(200).json({message: 'Eliminado con exito...'})
+        const body = req.body
+        if(body.tipo === 'team'){
+            const usrsIDS = []
+            body.vets.forEach( v => {
+                usrsIDS.push(v._id)
+            } )
+            console.log(usrsIDS)
+            const crls = []
+            body.corrales.forEach( c => {
+                crls.push(c.cod_corral)
+            } )
+            await Usuarios.findByIdAndDelete({_id: body.prep[0]._id})
+            await Equipos.updateOne({codigo: body.codigo}, {prep: 'open'})
+            await Usuarios.updateMany( {_id: {$in: usrsIDS}}, {cod_equipo: 'open'} )
+            await Corrales.updateMany( {cod_corral: {$in: crls}}, {equipo: 'open'} )
+            res.status(200).json({message: 'Exito en la operacion...'})
+            return
+        }else{
+            await Usuarios.findByIdAndDelete({_id: body._id})
+            res.status(200).json({message: 'Exito en la operacion...'})
+            return
+        }
     }catch(err){
         res.status(400).json({message: 'Error al eliminar...', error: err.message})
     }
@@ -54,6 +74,18 @@ userCtrl.getUser = async (req, res) => {
         res.status(200).json(payload)
     }catch(err){
         res.status(404).json({mensaje: 'USUARIO NO ENCONTRADO...'})
+    }
+}
+
+userCtrl.patchUser = async (req, res) => {
+    try{
+        const {nt, rut} = req.body
+        const usr = await Usuarios.findOne({rut: rut})
+        usr.cod_equipo = nt
+        await Usuarios.updateOne({_id: usr._id}, usr)
+        res.status(200).json({message: 'Exito en la operacion...'})
+    }catch(err){
+        res.status(400).json({message: 'Error en la operacion...'})
     }
 }
 

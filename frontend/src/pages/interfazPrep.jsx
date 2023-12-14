@@ -26,6 +26,7 @@ export default function InterfazPrep(){
                 const fchs = await axios.get(cfg.ruta+'/api/fichas', {headers: {Authorization: `Bearer ${user.token}`}})
                 const nots = await axios.get(cfg.ruta+'/api/notis', {headers: {Authorization: `Bearer ${user.token}`}})
                 const crrls = await axios.get(cfg.ruta+'/api/corrales', {headers: {Authorization: `Bearer ${user.token}`}})
+                const eqps = await axios.get(cfg.ruta+'/api/teams', {headers: {Authorization: `Bearer ${user.token}`}})
                 let team = {}
                 team.vets = usrs.data.filter( u => (u.tipo === 'veterinario' && u.cod_equipo === user.usrData.cod_equipo) )
                 team.corrales = crrls.data.filter( c => c.equipo === user.usrData.cod_equipo )
@@ -36,6 +37,7 @@ export default function InterfazPrep(){
                         h.ficha = fchs.data.filter( f => f.codigo === h.codigo_caballo )
                     }
                 }
+                console.log('USUARIOS:', usrs, '\nCABALLOS:', hrss, '\nFICHAS:', fchs, '\nNOTIFICACIONES:', nots, '\nEQUIPOS:', eqps, '\nCORRALES:', crrls)
                 return team
             }else return null
         }
