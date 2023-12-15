@@ -6,6 +6,7 @@ import { useAuthContext } from "../hooks/useAuthContext"
 import { useLogin } from "../hooks/useLogin"
 import logo from '../assets/horse-32.ico'
 import './../interfaz_generic.css'
+import { UserType } from "../enum/user-type.enum"
 
 export default function InterfazLogin(){
     const rut = useRef(null)
@@ -16,13 +17,13 @@ export default function InterfazLogin(){
 
     useEffect( () => {
         if(user){
-            if(user.usrData.tipo === 'veterinario'){
+            if(user.usrData.tipo === UserType.VETERINARY){
                 navegar(`/vet-user#${(user.token).split('.')[0]}`)
             }
-            if(user.usrData.tipo === 'preparador'){
+            if(user.usrData.tipo === UserType.PREP){
                 navegar(`/prep-user#${(user.token).split('.')[0]}`)
             }
-            if(user.usrData.tipo === 'admin'){
+            if(user.usrData.tipo === UserType.ADMIN){
                 navegar(`/admin-user#${(user.token).split('.')[0]}`)
             }
         }

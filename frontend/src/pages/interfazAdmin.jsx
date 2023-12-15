@@ -11,6 +11,9 @@ import AdminHome from "../components/admin_home"
 import cfg from '../cfg.json'
 import axios from 'axios'
 import logo from './../assets/horse-32.ico'
+import { UserType } from "../enum/user-type.enum"
+import { TeamStatus } from "../enum/team-status.enum"
+import { NotifysTarget } from "../enum/notifys-target.enum"
 
 export default function InterfazAdmin(){
     const [verPreps, setVerPreps] = useState(false)
@@ -42,18 +45,18 @@ export default function InterfazAdmin(){
                 const crls = await (await axios.get(cfg.ruta+'/api/corrales', {headers: {Authorization: `Bearer ${user.token}`}})).data
                 
                 eqps.forEach( e => {
-                    if(e.prep != 'open'){ 
+                    if(e.prep != TeamStatus.OPEN){ 
                         e.prep = usrs.filter( u => u.rut === e.prep )
-                        e.vets = usrs.filter( u => (u.cod_equipo === e.codigo && u.tipo === 'veterinario') )
+                        e.vets = usrs.filter( u => (u.cod_equipo === e.codigo && u.tipo === UserType.VETERINARY) )
                         e.horses = hrss.filter( h => h.codigo_equipo === e.codigo )
                         if(e.horses[0]) e.horses.forEach( h => h.ficha = fchs.filter( f => f.codigo === h.codigo_caballo ) )
-                        e.notificaciones = nots.filter( n => (  n.target === 'all' || n.target === e.codigo ) )
+                        e.notificaciones = nots.filter( n => (  n.target === NotifysTarget.ALL || n.target === e.codigo ) )
                         e.corrales = crls.filter( c => c.equipo === e.codigo )
                     }
                 } )
-                let corralesDisponibles = crls.filter( c => c.equipo === 'open' )
-                let vetsDisponibles = usrs.filter( u => (u.tipo === 'veterinario' && u.cod_equipo === 'open') )
-                let caballosDisponibles = hrss.filter( h => h.codigo_equipo === 'open' )
+                let corralesDisponibles = crls.filter( c => c.equipo === TeamStatus.OPEN )
+                let vetsDisponibles = usrs.filter( u => (u.tipo === UserType.VETERINARY && u.cod_equipo === TeamStatus.OPEN) )
+                let caballosDisponibles = hrss.filter( h => h.codigo_equipo === TeamStatus.OPEN )
                 if(caballosDisponibles[0]) caballosDisponibles.forEach( c => c.ficha = fchs.filter( f => f.codigo === c.codigo_caballo ) )
                 eqps.push(corralesDisponibles)
                 eqps.push(vetsDisponibles)

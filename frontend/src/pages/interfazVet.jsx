@@ -10,6 +10,8 @@ import Notificaciones from "../components/ver_nots"
 import cfg from '../cfg.json'
 import axios from 'axios'
 import logo from './../assets/horse-32.ico'
+import { NotifysTarget } from "../enum/notifys-target.enum"
+import { UserType } from "../enum/user-type.enum"
 
 export default function InterfazVet(){
     const [section, setSection] = useState('vetHome')
@@ -25,7 +27,7 @@ export default function InterfazVet(){
                 const nots = await axios.get(cfg.ruta+'/api/notis', {headers: {Authorization: `Bearer ${user.token}`}})
                 let team = {}
                 team.horses = hrss.data.filter( h => h.codigo_equipo === user.usrData.cod_equipo)
-                team.notificaciones = nots.data.filter( n => (n.target === user.usrData.cod_equipo || n.target === 'all') )
+                team.notificaciones = nots.data.filter( n => (n.target === user.usrData.cod_equipo || n.target === NotifysTarget.ALL) )
                 if(team.horses[0]){
                     for(let n of team.horses){
                         n.ficha = fchs.data.filter( f => f.codigo === n.codigo_caballo )
@@ -38,7 +40,7 @@ export default function InterfazVet(){
 
     useEffect( () => {
         if(user){
-            if(user.usrData.tipo != 'veterinario'){
+            if(user.usrData.tipo != UserType.VETERINARY){
                 navegar('/')
             }
         }else navegar('/')

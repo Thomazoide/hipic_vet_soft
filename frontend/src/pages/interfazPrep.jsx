@@ -11,6 +11,8 @@ import Notificaciones from "../components/ver_nots"
 import cfg from '../cfg.json'
 import axios from 'axios'
 import logo from './../assets/horse-32.ico'
+import { UserType } from "../enum/user-type.enum"
+import { NotifysTarget } from "../enum/notifys-target.enum"
 
 export default function InterfazPrep(){
     const [section, setSection] = useState('home')
@@ -28,16 +30,15 @@ export default function InterfazPrep(){
                 const crrls = await axios.get(cfg.ruta+'/api/corrales', {headers: {Authorization: `Bearer ${user.token}`}})
                 const eqps = await axios.get(cfg.ruta+'/api/teams', {headers: {Authorization: `Bearer ${user.token}`}})
                 let team = {}
-                team.vets = usrs.data.filter( u => (u.tipo === 'veterinario' && u.cod_equipo === user.usrData.cod_equipo) )
+                team.vets = usrs.data.filter( u => (u.tipo === UserType.VETERINARY && u.cod_equipo === user.usrData.cod_equipo) )
                 team.corrales = crrls.data.filter( c => c.equipo === user.usrData.cod_equipo )
                 team.horses = hrss.data.filter( h => h.codigo_equipo === user.usrData.cod_equipo)
-                team.notificaciones = nots.data.filter( n => (n.target === 'all' || n.target === user.usrData.cod_equipo) )
+                team.notificaciones = nots.data.filter( n => (n.target === NotifysTarget.ALL || n.target === user.usrData.cod_equipo) )
                 if(team.horses.length > 0){
                     for(let h of team.horses){
                         h.ficha = fchs.data.filter( f => f.codigo === h.codigo_caballo )
                     }
                 }
-                console.log('USUARIOS:', usrs, '\nCABALLOS:', hrss, '\nFICHAS:', fchs, '\nNOTIFICACIONES:', nots, '\nEQUIPOS:', eqps, '\nCORRALES:', crrls)
                 return team
             }else return null
         }
@@ -45,7 +46,7 @@ export default function InterfazPrep(){
 
     useEffect( () => {
         if(user){
-            if(user.usrData.tipo != 'preparador'){
+            if(user.usrData.tipo != UserType.PREP){
                 navegar('/')
             }
         }else navegar('/')
