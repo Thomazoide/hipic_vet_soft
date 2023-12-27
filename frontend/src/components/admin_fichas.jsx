@@ -16,6 +16,7 @@ export default function AdminFichas({query}){
     useEffect( () => {
         if(query.data){
             const qd = query.data.filter( t => ( t.prep !== 'open' && !Array.isArray(t) ) )
+            console.log(qd)
             if(qd[0]){
                 for(let t of qd){
                     if(t.horses[0]){
@@ -77,12 +78,12 @@ export default function AdminFichas({query}){
 
     const handleSelect = (e) => {
         let auxSel
-        for(let p of query.data){
-            if(p.cod_equipo === e){
-                auxSel = p
+        for(let p of equipos){
+            if(p.codigo === e){
+                setSelectedTeam(p)
             }
         }
-        setSelectedTeam(auxSel)
+        
     }
 
     //bloque funciones

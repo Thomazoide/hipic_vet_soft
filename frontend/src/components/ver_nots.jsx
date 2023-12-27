@@ -38,7 +38,7 @@ export default function Notificaciones({query}){
                                         </p>
                                     </Container>
                                     <Container>
-                                        <p>Fecha: { n.fecha } </p>
+                                        <p>Fecha: { n.fecha.split('T')[0] } </p>
                                     </Container>
                                 </Container>
                                 <p> {n.descripcion} </p>

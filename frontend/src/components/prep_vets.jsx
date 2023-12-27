@@ -150,7 +150,7 @@ export default function PrepVets({query}){
                     </ButtonGroup>
                 </Container>
                 <Container className='lista-preps'>
-                    <h1> {selectedVet.nombre} </h1>
+                    <h1>Veterinario/a: {selectedVet.nombre} </h1>
                     <p>Rut: {selectedVet.rut}</p>
                     <p> Email: {selectedVet.email} </p>
                     <p> Celular: {selectedVet.cell} </p>
@@ -181,6 +181,7 @@ export default function PrepVets({query}){
                 <VetData/>
             </Container> : null}
             <div className='lista-crear-preps'>
+                <h1>Crear veterinario/a</h1>
                 <Form onSubmit={crearVet}>
                     <Form.Group>
                         <Form.Label>

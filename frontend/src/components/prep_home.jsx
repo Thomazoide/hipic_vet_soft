@@ -51,9 +51,9 @@ export default function PrepHome({query}){
                         corrales.map( c => (
                             <Col key={c.cod_corral} >
                                 <Container key={c.cod_corral} className="corral">
-                                    <p> <strong className="text-primary" > {c.cod_corral} </strong> </p>
+                                    <p>Corral: <strong className="text-primary" > {c.cod_corral} </strong> </p>
                                     <hr/>
-                                    <p className="minititle" > Caballos: </p>
+                                    <p className="minititle" > Caballos: {c.cant_caballos}/{c.capacidad} </p>
                                     {
                                         !c.caballos[0] ? <p className="text-warning"> Corral sin caballos... </p> : <>
                                             {
