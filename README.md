@@ -2,11 +2,11 @@
 
 *Proyecto realizado para el ramo proyecto de título de la universidad.*
 
-##Resumen del proyecto
+## Resumen del proyecto
 
 El proyecto consiste en la creación de una plataforma web en la que pueden acceder los usuarios del establecimiento CLub Hípico, para manejar los datos de los caballos de cada equipo y prevenir cualquier tipo de inconveniente a la hora de querer inscribir un caballo en una carrera basado en el historial médico de este.
 
-###El sistema cuenta con usuarios basados en roles, de los cuales hay 3:
+### El sistema cuenta con usuarios basados en roles, de los cuales hay 3:
 
 1. Administrador:
 El usuario administrador, a traves de su interfaz de usuario puede añadir-eliminar-modificar otros usuarios, ver los equipos, sus corrales y sus veterinarios integrantes, asi como tambien, ver los exámenes realizados en cada caballo del equipo. Además de esto, puede enviar notificaciones a los equipos.
@@ -15,15 +15,15 @@ El usuario preparador, a traves de su interfaz de usuario puede añadir usuarios
 3. Veterinario:
 El usuario veterinario a traves de su interfaz de usuario puede ver los caballos del equipo al que este pertenece y añadir exámenes al historial médico de los caballos, asi como también puede crear una ficha veterinaria en caso de que no exista y eliminarla en caso de ser necesario.
 
-###Herramientas utilizadas en la construccion del software
+### Herramientas utilizadas en la construccion del software
 
--Backend:
+- Backend:
 Node.js, express, cors, mongodb
 
--Frontend:
+- Frontend:
 HTML, CSS, bootstrap, react, axios, rut.js, vite
 
-###Despliegue de la app
+### Despliegue de la app
 
 El backend de la app se encuentra desplegado en una maquina virtual de EC2 de AWS, mientras que el frontend se encuentra desplegado en vercel.
 
