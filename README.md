@@ -19,12 +19,14 @@ El usuario veterinario a traves de su interfaz de usuario puede ver los caballos
 
 -Backend:
 Node.js, express, cors, mongodb
+
 -Frontend:
 HTML, CSS, bootstrap, react, axios, rut.js, vite
 
 ###Despliegue de la app
 
 El backend de la app se encuentra desplegado en una maquina virtual de EC2 de AWS, mientras que el frontend se encuentra desplegado en vercel.
+
 [Hipic-Vet](https://hipic-vet.vercel.app/)
 
 *Si estás interesado en probar la app más a fondo te invito a escribirme un correo a ttellerias01@outlook.com para brindarte un usuario y contraseña para que pruebes la app.*
